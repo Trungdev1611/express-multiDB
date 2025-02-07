@@ -21,7 +21,8 @@ const PORT = process.env.PORT || 6666
 export const DATABASES = {
   mysql: "MySQL",
   sequelize: "Sequelize",
-  mongo: "MongoDB"
+  mongo: "MongoDB",
+  'sequelize-postgres': "PostGres-SQL"
 };
 const TYPE_DATABASE = DATABASES[currentBranch] || '--not defined--';
 

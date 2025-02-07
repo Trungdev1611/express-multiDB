@@ -9,7 +9,7 @@ UserModel.init({
         primaryKey: true,
     },
     name: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING, // k cần type: DataTypes.STRING(100) vì postgre không giới hạn
         allowNull: false,
     },
     email: {
@@ -19,7 +19,8 @@ UserModel.init({
     },
     created_at: {
         type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
+        // defaultValue: DataTypes.NOW,
+        defaultValue: sequelizeConnect.literal("CURRENT_TIMESTAMP"),
     },
 }, {
     sequelize: sequelizeConnect,
