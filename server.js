@@ -1,8 +1,10 @@
 import dotenv from 'dotenv'
 import bodyParser from 'body-parser'
 import express from 'express'
-import  connection from './config/db.js'
 import { execSync } from 'child_process';
+import authRouter from './routes/authRouter.js';
+import privateRouter from './routes/private/privateRoute.js';
+
 
 const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 
@@ -23,16 +25,7 @@ export const DATABASES = {
 };
 const TYPE_DATABASE = DATABASES[currentBranch] || '--not defined--';
 
-app.get("/users", (req, res) => {
-    connection.query("SELECT * FROM users", (error, results) => {
-      if (error) {
-        console.log("error", error)
-        return res.status(500).send(error);
-      }
-      res.json(results);
-    });
-  });
+app.use("/admin/v1/auth", authRouter)
+app.use("/admin/v1", privateRouter)
 
-  
-  
 app.listen(PORT, () => console.log(`Server running on port ${PORT} using database: ${TYPE_DATABASE}`));
