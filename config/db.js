@@ -1,3 +1,4 @@
+
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 
@@ -9,6 +10,7 @@ const sequelizeConnect = new Sequelize(process.env.DB_NAME, process.env.DB_USER,
     host: process.env.DB_HOST || 'localhost',
     dialect: 'mysql'/* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
 });
+
 
 try {
     await sequelizeConnect.authenticate();

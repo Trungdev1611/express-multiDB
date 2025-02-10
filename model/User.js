@@ -8,19 +8,28 @@ UserModel.init({
         autoIncrement: true,
         primaryKey: true,
     },
-    name: {
+    username: {
         type: DataTypes.STRING(100),
         allowNull: false,
+        unique: true,
     },
     email: {
         type: DataTypes.STRING(100),
         allowNull: false,
         unique: true,
     },
+    password: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+    },
     created_at: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
     },
+    updated_at: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    }
 }, {
     sequelize: sequelizeConnect,
     modelName: "User",
