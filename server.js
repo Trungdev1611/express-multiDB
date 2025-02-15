@@ -4,6 +4,7 @@ import express from 'express'
 import { execSync } from 'child_process';
 import authRouter from './routes/authRouter.js';
 import privateRouter from './routes/private/privateRoute.js';
+import { authMiddleWare } from './middleware/auth.middleware.js';
 
 
 const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
@@ -26,6 +27,6 @@ export const DATABASES = {
 const TYPE_DATABASE = DATABASES[currentBranch] || '--not defined--';
 
 app.use("/admin/v1/auth", authRouter)
-app.use("/admin/v1", privateRouter)
+app.use("/admin/v1",authMiddleWare, privateRouter)
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT} using database: ${TYPE_DATABASE}`));

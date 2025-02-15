@@ -41,7 +41,9 @@ export const login = async (req, res) => {
         }
 
         const JWT_SECRET = process.env.JWT_SECRET
-        const access_token = jwt.sign({ id: data.id, userId: data.id }, JWT_SECRET);
+        const access_token = jwt.sign({ id: data.id, userId: data.id }, JWT_SECRET, {
+            expiresIn: '1h' // Token sẽ hết hạn sau 1 giờ
+        } );
         res.status(200).json({ message: "login sucessfully", token: access_token })
     } catch (error) {
         console.error(error);

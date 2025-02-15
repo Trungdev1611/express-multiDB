@@ -14,7 +14,11 @@ export const getUsers = async (req, res) => {  //sẽ tối ưu với where id >
         const safeSortBy = allowedSortFields.includes(sortBy) ? sortBy : "id";
 
         console.log("sort", sort)
-        const sql = `SELECT u.*, r.name as role_name FROM users u join roles r ON u.role_id = r.id  WHERE username  LIKE ? ORDER BY u.${safeSortBy} ${sort} LIMIT ? OFFSET ?  `;
+        const sql = `
+        SELECT u.*, r.name as role_name, d.name as department_name FROM 
+        users u join roles r ON u.role_id = r.id 
+        left join department d  ON u.department_id = d.id 
+        WHERE username  LIKE ? ORDER BY u.${safeSortBy} ${sort} LIMIT ? OFFSET ?  `;
 
 
         const countSql = `SELECT COUNT(*) AS total FROM users WHERE username LIKE ?`;
