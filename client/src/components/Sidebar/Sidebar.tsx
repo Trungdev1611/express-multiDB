@@ -1,37 +1,78 @@
 'use client'
 
 import { Dispatch, SetStateAction, useState } from "react";
-import { List, ListItem, ListItemText, IconButton } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import { List, ListItem, ListItemText, IconButton, ListItemButton, ListItemIcon, } from "@mui/material";
+import {
+    Menu,
+    ChevronLeft, 
+    Inbox,
+    AccountCircle,
+    Apartment,
+    Security,
+    People,
+    Group
+} from '@mui/icons-material';
+import { useRouter } from "next/navigation";
+
 
 interface SideBarProps {
     setOpen: Dispatch<SetStateAction<boolean>>,
     open: boolean
 }
-function Sidebar (props: SideBarProps) {
-   
-    const {open, setOpen} = props
+
+const menuList = [
+    { name: "Account", url: "/users", icon: <AccountCircle /> },
+    { name: "Department", url: "/department", icon: <Apartment /> },
+    { name: "Roles", url: "/roles", icon: <Security /> },
+    { name: "Employees", url: "/employees", icon: <People /> },
+    { name: "Group", url: "/group", icon: <Group /> },
+    { name: "Menu", url: "/menu", icon: <Menu /> },
+    { name: "Chevron", url: "/chevron", icon: <ChevronLeft /> },
+    { name: "Inbox", url: "/inbox", icon: <Inbox /> },
+]
+function Sidebar(props: SideBarProps) {
+    const router = useRouter()
+    const { open, setOpen } = props
+    const [selectedKey, setSelectedkey] = useState(0)
+
+    const handleListItemClick = (
+        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+        url: string,
+    ) => {
+        console.log(event, url)
+        router.push(url)}
+    
     return (
-        <div className={`flex flex-col min-h-screen transition-all duration-300 ${open ? "w-64" : "w-16"}`}>
+        <div className={`flex flex-col min-h-screen transition-all duration-300 ${open ? "w-52" : "w-16"}`}>
             {/* Nút mở/đóng sidebar */}
             <div className="p-2 flex justify-end">
                 <IconButton onClick={() => setOpen(!open)} className="text-white">
-                    {open ? <ChevronLeftIcon /> : <MenuIcon />}
+                    {open ? <ChevronLeft /> : <Menu />}
                 </IconButton>
             </div>
 
             {/* Danh sách menu */}
             <List>
-                <ListItem onClick={() => console.log("Dashboard Clicked")}>
-                    <ListItemText primary="Dashboard" className={`${open ? "block" : "hidden"}`} />
-                </ListItem>
-                <ListItem onClick={() => console.log("Settings Clicked")}>
-                    <ListItemText primary="Settings" className={`${open ? "block" : "hidden"}`} />
-                </ListItem>
-                <ListItem onClick={() => console.log("Logout Clicked")}>
-                    <ListItemText primary="Logout" className={`${open ? "block" : "hidden"}`} />
-                </ListItem>
+                {menuList.map((item, index) => {
+                    return (
+                        <ListItemButton
+                            key={index}
+                            selected={selectedKey === index}
+                            onClick={(event) => {
+                                setSelectedkey(index)
+                                handleListItemClick(event, item.url)
+                            }}
+                        >
+                            <ListItemIcon>
+                                {item.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={item.name} className={`${open ? "block" : "hidden"}`} />
+                        </ListItemButton>
+
+                    );
+                })}
+
+
             </List>
         </div>
     );

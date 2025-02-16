@@ -1,7 +1,7 @@
 'use client';
 
 import api from '@/util/api';
-import {  Box, Button, Container, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -54,30 +54,39 @@ const LoginForm: React.FC = () => {
                 <Typography component="h1" variant="h5">
                     Login
                 </Typography>
-    
+
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
+
+                    <Typography variant="subtitle1" sx={{ mb: 1 }}>
+                        Username
+                    </Typography>
                     <TextField
                         variant="outlined"
                         required
                         fullWidth
                         id="username"
-                        label="Username"
                         {...register('username', { required: 'Username is required' })}
                         error={!!errors.username}
                         helperText={errors.username?.message}
                         margin="normal"
+                        autoComplete='off'
                     />
+
+                    <Typography variant="subtitle1" sx={{ mb: 1, mt: 2 }}>
+                        Password
+                    </Typography>
                     <TextField
                         variant="outlined"
                         required
                         fullWidth
                         id="password"
-                        label="Password"
                         type="password"
                         {...register('password', { required: 'Password is required' })}
                         error={!!errors.password}
                         helperText={errors.password?.message}
                         margin="normal"
+                        autoComplete='off'
+
                     />
                     <Button
                         type="submit"
