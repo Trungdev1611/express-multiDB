@@ -1,11 +1,14 @@
 'use client'
-import { Box, Paper } from '@mui/material'
+import { Box, Button, Paper } from '@mui/material'
 import React from 'react'
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import Filter from '@/components/users/Filter';
 
 const columns: GridColDef<(typeof rows)[number]>[] = [
-    { field: 'id', headerName: 'ID', width: 90,     headerAlign: 'center',
-        align: 'center', },
+    {
+        field: 'id', headerName: 'ID', width: 90, headerAlign: 'center',
+        align: 'center',
+    },
     {
         field: 'firstName',
         headerName: 'First name',
@@ -57,8 +60,15 @@ const rows = [
 
 export default function Users() {
     return (
-        <div className=' '>
-            Filter
+        <div className='p-3'>
+  
+            <Box>
+                <Filter />
+            </Box>
+
+            <div className='flex justify-end mb-5'>
+                <Button variant="outlined">Create New</Button>
+            </div>
             <Box sx={{ height: 400, width: '100%' }}>
                 <DataGrid
                     rows={rows}
