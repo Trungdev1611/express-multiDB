@@ -25,7 +25,7 @@ export const getUsers = async (req, res) => {  //sẽ tối ưu với where id >
         const [rows] = await connection.query(sql, [`${search}%`, limit, offset]);;
         const [total] = await connection.execute(countSql, [`${search}%`])
 
-    
+
         return res.status(200).json({
             data: rows,
             paginate: {
@@ -41,23 +41,51 @@ export const getUsers = async (req, res) => {  //sẽ tối ưu với where id >
 }
 
 
-export const getDetailUser = async(req, res) => {
+export const getDetailUser = async (req, res) => {
     try {
         let id = req.params.id
         console.log("iddd", id)
-        if(!id && isNaN(Number(id))) {
+        if (!id && isNaN(Number(id))) {
             throw new Error("id is not valid");
         }
         id = Number(id)
-        let querySql = `Select u.*, r.name as role from users join roles where id = ?` 
+        let querySql = `Select u.*, r.name as role from users join roles where id = ?`
         let [rows] = await connection.query(querySql, [id])
-  
+
         if (rows.length === 0) {
             return res.status(404).json({ message: "User not found" });
         }
 
         return res.status(200).json({ data: rows[0] });
     } catch (error) {
+        console.log("error", error)
+        res.status(400).json({ message: error.message })
+    }
+}
+
+export const createUser = async (req, res) => {
+    try {
+        const { username, password, email, role_id, department_id } = req.body
+        console.log(`fdfdfdf`, req.body)
+        // Bắt đầu transaction
+        await connection.beginTransaction();
+
+        const queryCheckExist = `select u.username from users u where u.username = ? or u.email = ?`
+        const [rows] =await  connection.query(queryCheckExist, [username, email])
+        if (rows.length > 0) {
+            // Rollback transaction nếu dữ liệu đã tồn tại
+            await connection.rollback();
+
+            return res.status(400).json({ msg: "username or email is exist" })
+        }
+        const queryInsert = `insert into users (username, password, email, role_id, department_id) values(?, ?, ?, ?, ?)`
+
+        const [dataInsert] = await connection.query(queryInsert, [username, password, email, role_id, department_id])
+        return res.status(201).json({ username, email, role_id, department_id })
+    } catch (error) {
+        if (connection) {
+            await connection.rollback();
+        }
         console.log("error", error)
         res.status(400).json({ message: error.message })
     }
