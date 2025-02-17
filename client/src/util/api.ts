@@ -3,7 +3,7 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } f
 
 // Tạo instance axios với cấu hình mặc định
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:6666/admin/v1',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8080/admin/v1',
   timeout: 10000, // 10 giây timeout
 });
 
@@ -37,7 +37,7 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
+type PayloadData = object
 
 const api = {
   // GET request không có query parameters
@@ -58,9 +58,9 @@ const api = {
   },
 
   // POST request, data kiểu T
-  post: async <T, D>(
+  post: async <T>(
     url: string,
-    data: D,
+    data: PayloadData,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> => {
     return axiosInstance.post<T>(url, data, config);

@@ -44,7 +44,6 @@ export const getUsers = async (req, res) => {  //sẽ tối ưu với where id >
 export const getDetailUser = async (req, res) => {
     try {
         let id = req.params.id
-        console.log("iddd", id)
         if (!id && isNaN(Number(id))) {
             throw new Error("id is not valid");
         }
@@ -66,7 +65,6 @@ export const getDetailUser = async (req, res) => {
 export const createUser = async (req, res) => {
     try {
         const { username, password, email, role_id, department_id } = req.body
-        console.log(`fdfdfdf`, req.body)
         // Bắt đầu transaction
         await connection.beginTransaction();
 

@@ -1,12 +1,12 @@
 'use client';
 
 import api from '@/util/api';
-import { Box, Button, Container, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-
+import { useRouter } from 'next/navigation'
 interface LoginFormValues {
     username: string;
     password: string;
@@ -26,14 +26,17 @@ const LoginForm: React.FC = () => {
     } = useForm<LoginFormValues>({
         resolver: yupResolver(schema),
     });
-
+    const router = useRouter()
+   
     const [loading, setLoading] = useState<boolean>(false);
 
     const onSubmit = async (data: LoginFormValues) => {
         setLoading(true);
         try {
-            await api.post('/auth', data);
-            console.log('Logging in with:', data);
+            const  res = await api.post<{token: string, message: string}>('/auth/login', data);
+            localStorage.setItem("token", res.data.token)
+            router.push("/users")
+            console.log('Logging in with:', data,  res);
             setLoading(false);
         } catch (err) {
             console.log(err);
@@ -42,7 +45,7 @@ const LoginForm: React.FC = () => {
     };
 
     return (
-        <Container maxWidth="sm">
+        <div className=''>
             <Box
                 sx={{
                     marginTop: 8,
@@ -55,7 +58,7 @@ const LoginForm: React.FC = () => {
                     Login
                 </Typography>
 
-                <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
+                <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }} className='w-1/2  min-w-[400px] max-w-[500px] '>
 
                     <Typography variant="subtitle1" sx={{ mb: 1 }}>
                         Username
@@ -100,7 +103,7 @@ const LoginForm: React.FC = () => {
                     </Button>
                 </Box>
             </Box>
-        </Container>
+        </div>
     );
 };
 

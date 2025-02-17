@@ -5,18 +5,18 @@ import { execSync } from 'child_process';
 import authRouter from './routes/authRouter.js';
 import privateRouter from './routes/private/privateRoute.js';
 import { authMiddleWare } from './middleware/auth.middleware.js';
-
+import cors from "cors";
 
 const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 
 //configuration
 dotenv.config()
 const app = express()
-
+app.use(cors());
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended: false}))  //in the above version, we don't need to use body parser because this library was integrated in express
 
-const PORT = process.env.PORT || 6666
+const PORT = process.env.PORT || 8080
 
 //
 export const DATABASES = {
@@ -27,6 +27,7 @@ export const DATABASES = {
 const TYPE_DATABASE = DATABASES[currentBranch] || '--not defined--';
 
 app.use("/admin/v1/auth", authRouter)
-app.use("/admin/v1",authMiddleWare, privateRouter)
-
+app.use("/admin/v1",
+  // authMiddleWare,
+   privateRouter)
 app.listen(PORT, () => console.log(`Server running on port ${PORT} using database: ${TYPE_DATABASE}`));
