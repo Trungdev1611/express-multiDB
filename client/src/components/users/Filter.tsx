@@ -1,45 +1,35 @@
 import { MenuItem, Select } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import FormFieldSelect, { SelectItem } from '../common/FormFieldSelect'
+import api from '@/util/api'
 
 const Filter = () => {
-    return (
-        <div className='flex gap-10 py-5'>
-            <div className='flex gap-4 items-center flex-1'>
-                <span>Department</span>
-                <Select
-                    displayEmpty
-                    value={""}
-                    className='w-full'
-                //   onChange={handleChange}
-                >
-                    <MenuItem value="" disabled>
-                        Please select an option
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </div>
+  const [filterData, setFilterData] = useState({department: [] as Array<SelectItem> , roles: [] as Array<SelectItem>})
+  useEffect(() => {
+    async function getDataFilter() {
+      try {
+          let [departmentRes, rolesRes] = await Promise.all(
+            [
+              api.get<Array<SelectItem>>('/department'),[]
+              // api.get<Array<SelectItem>>('/roles'),
+            ] )
+            setFilterData({
+              department: departmentRes.data,
+              roles: [] //rolesRes.data ,
+            });
+      } catch (error) {
+        console.log("error", error)
+      }
+    }
+    getDataFilter()
+  },[])
+  return (
+    <div className='flex gap-10 py-5'>
+      <FormFieldSelect label='Department' options={filterData.department}  />
+      <FormFieldSelect label='Roles'  options={filterData.roles} />
 
-            <div className='flex gap-4 items-center flex-1'>
-                <span>Roles</span>
-                <Select
-                    displayEmpty
-                    className='w-full'
-                    value={""}
-                //   onChange={handleChange}
-                >
-                    <MenuItem value="" disabled>
-                        Please select an option
-                    </MenuItem>
-                    <MenuItem value={10}>Ten</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                </Select>
-            </div>
-
-        </div>
-    )
+    </div>
+  )
 }
 
 export default Filter
