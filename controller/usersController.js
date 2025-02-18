@@ -43,11 +43,8 @@ export const getUsers = async (req, res) => {  //sẽ tối ưu với where id >
 
 export const getDetailUser = async (req, res) => {
     try {
-        let id = req.params.id
-        if (!id && isNaN(Number(id))) {
-            throw new Error("id is not valid");
-        }
-        id = Number(id)
+        let id = req.user.id //get from middleware token
+      
         let querySql = `Select u.*, r.name as role from users join roles where id = ?`
         let [rows] = await connection.query(querySql, [id])
 
