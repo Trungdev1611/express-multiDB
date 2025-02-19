@@ -9,14 +9,18 @@ import { useEffect, useState } from "react";
 export default function Layout(props: { children: React.ReactNode }) {
   const router = useRouter()
   const [open, setOpen] = useState(true);
-  const token = localStorage.getItem(`token`)
+
 
   useEffect(() => {
-    if (!token) {
-      router.push(`/login`)
-      return
+    if(typeof window === "undefined") {
+      const token = localStorage?.getItem(`token`)
+      if (!token) {
+        router.push(`/login`)
+        return
+      }
     }
-  }, [token, router])
+ 
+  }, [ router])
   return (
     <div className="flex 0 min-h-screen ">
       <Paper className="fixed bg-red-400" elevation={1}>

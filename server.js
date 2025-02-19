@@ -28,6 +28,6 @@ const TYPE_DATABASE = DATABASES[currentBranch] || '--not defined--';
 
 app.use("/admin/v1/auth", authRouter)
 app.use("/admin/v1",
-  // authMiddleWare,
+  authMiddleWare,
    privateRouter)
 app.listen(PORT, () => console.log(`Server running on port ${PORT} using database: ${TYPE_DATABASE}`));

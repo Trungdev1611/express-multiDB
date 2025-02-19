@@ -1,8 +1,8 @@
 import connection from "../config/db.js"
 
-export const getListDepartment = async(req, res) => {
+export const getListRole = async(req, res) => {
     try {
-        const queryGetList = ` select * from department`
+        const queryGetList = ` select * from roles`
         const [rows] =await connection.query(queryGetList)
         return res.status(200).json({
             data: rows
@@ -13,7 +13,7 @@ export const getListDepartment = async(req, res) => {
     }
 }
 
-export const createNewDepartment = async(req, res) => {
+export const createNewRole = async(req, res) => {
     try {
         
     } catch (error) {
@@ -21,7 +21,7 @@ export const createNewDepartment = async(req, res) => {
     }
 }
 
-export const updateDepartment = async(req, res) => {
+export const updateRole = async(req, res) => {
     try {
         
     } catch (error) {
@@ -29,7 +29,7 @@ export const updateDepartment = async(req, res) => {
     }
 }
 
-export const deleteDepartment = async(req, res) => {
+export const deleteRole = async(req, res) => {
     try {
         
     } catch (error) {

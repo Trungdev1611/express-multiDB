@@ -36,7 +36,7 @@ export const getUsers = async (req, res) => {  //sẽ tối ưu với where id >
         })
     } catch (error) {
         console.log("error", error)
-        res.status(500).json({ message: error.message })
+        res.status(400).json({ message: error.message })
     }
 }
 

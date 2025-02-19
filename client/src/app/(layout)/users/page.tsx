@@ -1,33 +1,37 @@
 'use client'
-import { Box, Button, Paper } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import React from 'react'
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Filter from '@/components/users/Filter';
-
-const columns: GridColDef<(typeof rows)[number]>[] = [
+import { useToast } from '@/context/ToastContext';
+import userAPI from '@/util/api/user/User';
+import { UserType } from '@/util/api/user/type';
+import dayjs from 'dayjs'
+import { useQuery } from '@tanstack/react-query';
+const columns: GridColDef<(UserType)>[] = [
     {
         field: 'id', headerName: 'ID', width: 90, headerAlign: 'center',
         align: 'center',
     },
     {
-        field: 'firstName',
-        headerName: 'First name',
+        field: 'username',
+        headerName: 'User name',
         editable: true,
         headerAlign: 'center',
         align: 'center',
         flex: 1
     },
     {
-        field: 'lastName',
-        headerName: 'Last name',
+        field: 'email',
+        headerName: 'Email',
         editable: true,
         headerAlign: 'center',
         align: 'center',
         flex: 1
     },
     {
-        field: 'age',
-        headerName: 'Age',
+        field: 'role_name',
+        headerName: 'Role',
         type: 'number',
         editable: true,
         headerAlign: 'center',
@@ -35,30 +39,39 @@ const columns: GridColDef<(typeof rows)[number]>[] = [
         flex: 0.5
     },
     {
-        field: 'fullName',
-        headerName: 'Full name',
-        description: 'This column has a value getter and is not sortable.',
+        field: 'created_at',
+        headerName: 'Date',
         sortable: false,
         headerAlign: 'center',
         align: 'center',
-        valueGetter: (value, row) => `${row.firstName || ''} ${row.lastName || ''}`,
-        flex: 2
+        flex: 2,
+        valueFormatter: (value) => dayjs(value).format("DD-MM-YYYY")
     },
 ];
 
-const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 14 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 31 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 31 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 11 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
 
 export default function Users() {
+    const { showToast } = useToast();
+
+    const { isLoading, data: responseUser, isError } = useQuery({
+        queryKey: ['userList'],
+        queryFn: async () => {
+          const res = await userAPI.getUserList()
+          console.log("res", res)
+          return res
+        },
+      })
+    
+    
+    if (isLoading) {
+        return <h2>Loading...</h2>
+    }
+
+    if (isError) {
+        showToast("get list user error", "error") 
+        return 
+    }
+    // const total
     return (
         <div className='p-3'>
   
@@ -69,18 +82,18 @@ export default function Users() {
             <div className='flex justify-end mb-5'>
                 <Button variant="outlined">Create New</Button>
             </div>
-            <Box sx={{ height: 400, width: '100%' }}>
+            <Box sx={{ width: '100%' }}>
                 <DataGrid
-                    rows={rows}
+                    rows={responseUser?.data}
                     columns={columns}
                     initialState={{
                         pagination: {
                             paginationModel: {
-                                pageSize: 5,
+                                pageSize: 10,
                             },
                         },
                     }}
-                    pageSizeOptions={[5]}
+                    pageSizeOptions={[10]}
                     checkboxSelection
                     disableRowSelectionOnClick
                     showCellVerticalBorder

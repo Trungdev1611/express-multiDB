@@ -1,3 +1,5 @@
+
+
 import { MenuItem, Select } from "@mui/material"
 import React from "react"
 
@@ -30,7 +32,7 @@ const FormFieldSelect = (props: FormFieldSelect) => {
                 <MenuItem value="" disabled>
                     Please select an option
                 </MenuItem>
-                {options.map((item) => {
+                {options?.map((item) => {
                     return (
                         <MenuItem value={item.id} key={item.id}>
                             {item.name}

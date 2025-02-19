@@ -3,7 +3,7 @@ import { getUsers, getDetailUser, createUser } from '../../controller/usersContr
 
 const userRouter = express.Router()
 
-userRouter.get("/getAll", getUsers)
+userRouter.get("/getlist", getUsers)
 
 userRouter.get("/:id", getDetailUser)
 

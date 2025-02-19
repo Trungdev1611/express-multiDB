@@ -40,18 +40,17 @@ axiosInstance.interceptors.response.use(
 type PayloadData = object
 
 const api = {
-  // GET request không có query parameters
-  get: async <T>(
+
+  get: async(
     url: string,
     config?: AxiosRequestConfig
   ) => {
-    return axiosInstance.get<T>(url, config);
+    return axiosInstance.get(url, config);
   },
 
-  // GET request với query parameters, params kiểu T
-  getQuery: async <T, P>(
+  getQuery: async <T>(
     url: string,
-    params: P,
+    params: PayloadData,
     config?: AxiosRequestConfig
   ): Promise<AxiosResponse<T>> => {
     return axiosInstance.get<T>(url, { ...config, params });
