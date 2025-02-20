@@ -24,3 +24,20 @@ export interface UserType {
   sortBy: string;
   sort: string;
 }
+
+export interface FilterUser {
+  department_id: number,
+  role_id: number
+}
+
+export interface ParamsUserFilter  {
+  page: number,
+  pageSize: number,
+  sortBy: string,
+  sort: string,
+  department_id?: number | null | string | undefined,
+  role_id?: number | null | string | undefined
+}
+export interface FilterUserProps {
+  setParams:  React.Dispatch<React.SetStateAction<ParamsUserFilter>>
+}

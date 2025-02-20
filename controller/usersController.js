@@ -4,25 +4,33 @@ export const getUsers = async (req, res) => {  //sẽ tối ưu với where id >
     try {
         const query = req.query
         const sort = query.sort === "asc" ? "asc" : "desc"
-        const { page = 1, pageSize = 10, sortBy = "id", search = "" } = req.query
+        let { page = 1, pageSize = 10, sortBy = "id", search = "", department_id  ,role_id  } = req.query
         const pageNumber = Number(page)
         const limit = Number(pageSize)
         const offset = (pageNumber - 1) * limit;
-
+         department_id = department_id || null
+         role_id = role_id || null
         // Chỉ cho phép các cột hợp lệ
         const allowedSortFields = ["id", "username", "email"];
         const safeSortBy = allowedSortFields.includes(sortBy) ? sortBy : "id";
 
-        console.log("sort", sort)
+        console.log("sort", sort, department_id, role_id)
         const sql = `
         SELECT u.*, r.name as role_name, d.name as department_name FROM 
         users u join roles r ON u.role_id = r.id 
         left join department d  ON u.department_id = d.id 
-        WHERE username  LIKE ? ORDER BY u.${safeSortBy} ${sort} LIMIT ? OFFSET ?  `;
+        WHERE username  LIKE ?
 
+        AND (? IS NULL OR u.department_id = ?) 
+        AND (? IS NULL OR u.role_id = ?)
 
-        const countSql = `SELECT COUNT(*) AS total FROM users WHERE username LIKE ?`;
-        const [rows] = await connection.query(sql, [`${search}%`, limit, offset]);;
+        ORDER BY u.${safeSortBy} ${sort} LIMIT ? OFFSET ?  `;
+
+       // AND (? IS NULL OR u.department_id = ?) -- Nếu giá trị ? là NULL => trả về TRUE => bỏ qua điều kiện này (không lọc) --
+       
+       
+       const countSql = `SELECT COUNT(*) AS total FROM users WHERE username LIKE ?`;
+        const [rows] = await connection.query(sql, [`${search}%`, department_id, department_id, role_id, role_id,limit, offset]);;
         const [total] = await connection.execute(countSql, [`${search}%`])
 
 
@@ -44,7 +52,7 @@ export const getUsers = async (req, res) => {  //sẽ tối ưu với where id >
 export const getDetailUser = async (req, res) => {
     try {
         let id = req.user.id //get from middleware token
-      
+
         let querySql = `Select u.*, r.name as role from users join roles where id = ?`
         let [rows] = await connection.query(querySql, [id])
 
@@ -66,7 +74,7 @@ export const createUser = async (req, res) => {
         await connection.beginTransaction();
 
         const queryCheckExist = `select u.username from users u where u.username = ? or u.email = ?`
-        const [rows] =await  connection.query(queryCheckExist, [username, email])
+        const [rows] = await connection.query(queryCheckExist, [username, email])
         if (rows.length > 0) {
             // Rollback transaction nếu dữ liệu đã tồn tại
             await connection.rollback();

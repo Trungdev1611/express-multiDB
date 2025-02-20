@@ -5,7 +5,7 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import Filter from '@/components/users/Filter';
 import { useToast } from '@/context/ToastContext';
 import userAPI from '@/util/api/user/User';
-import { UserType } from '@/util/api/user/type';
+import {  ParamsUserFilter, UserType } from '@/util/api/user/type';
 import dayjs from 'dayjs'
 import { useQuery } from '@tanstack/react-query';
 const columns: GridColDef<(UserType)>[] = [
@@ -53,7 +53,7 @@ const columns: GridColDef<(UserType)>[] = [
 export default function Users() {
     const { showToast } = useToast();
     const [total, setTotal] = useState(0)
-    const [params, setParams] = useState({
+    const [params, setParams] = useState<ParamsUserFilter>({
         page: 1,
         pageSize: 10,
         sortBy: "id",
@@ -73,11 +73,12 @@ export default function Users() {
 
     if (isError) {
         showToast("get list user error", "error") 
+        return
     }
     return (
         <div className='p-3'>
     
-                     <Filter />
+                     <Filter setParams = {setParams}/>
      
                  <div className='flex justify-end mb-5'>
                      <Button variant="outlined">Create New</Button>
