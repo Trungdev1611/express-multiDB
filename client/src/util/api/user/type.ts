@@ -17,3 +17,10 @@ export interface UserType {
     data: UserType[],
     paginate: PagninateType
   }
+
+  export interface ParamsGetUserType {
+  page: number;
+  pageSize: number;
+  sortBy: string;
+  sort: string;
+}

@@ -1,11 +1,11 @@
 import api from "../../api"
-import { DataPagninateUser } from "./type"
+import { DataPagninateUser, ParamsGetUserType } from "./type"
 
 
 
 class UserAPI {
-    async getUserList(): Promise<DataPagninateUser> {
-      const response = await api.get("/users/getlist")
+    async getUserList(params:ParamsGetUserType): Promise<DataPagninateUser> {
+      const response = await api.getQuery("/users/getlist", params)
       return response.data
     }
   }

@@ -48,15 +48,14 @@ const api = {
     return axiosInstance.get(url, config);
   },
 
-  getQuery: async <T>(
+  getQuery: async(
     url: string,
     params: PayloadData,
     config?: AxiosRequestConfig
-  ): Promise<AxiosResponse<T>> => {
-    return axiosInstance.get<T>(url, { ...config, params });
+  ) => {
+    return axiosInstance.get(url, { ...config, params });
   },
 
-  // POST request, data kiểu T
   post: async <T>(
     url: string,
     data: PayloadData,

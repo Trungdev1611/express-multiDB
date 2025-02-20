@@ -12,16 +12,11 @@ const Filter = () => {
         async function getDataFilter() {
             try {
                 const [department, roles] = await Promise.all(
-                    [
-                        departmentAPI.getDepartmentList(),
-                        roleAPI.roleList()
-                    ])
-                    console.log("department", department)
-                setFilterData({
-                    department,
-                    roles,
-                });
+                    [departmentAPI.getDepartmentList(), roleAPI.roleList()])
+                console.log("department", department, roles)
+                setFilterData({department, roles: [],});
             } catch (error) {
+                setFilterData({ department: [], roles: [] })
                 console.log("error", error)
             }
         }

@@ -4,7 +4,7 @@ import api from "../../api"
 class Roles {
     async roleList(): Promise<SelectItem[]> {
       const response = await api.get("/role/getlist")
-      return response.data
+      return response?.data?.data
     }
   }
   
