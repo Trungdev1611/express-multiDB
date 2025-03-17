@@ -1,5 +1,5 @@
 // contexts/ToastContext.tsx
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useCallback, useEffect } from "react";
 import { Snackbar, Alert } from "@mui/material";
 
 interface ToastProps {
@@ -10,17 +10,29 @@ interface ToastProps {
 interface ToastContextProps {
   showToast: (message: string, type?: ToastProps["type"]) => void;
 }
-
+export let showToastRef: ((message: string, type?: ToastProps["type"]) => void) | null = null;
 const ToastContext = createContext<ToastContextProps | undefined>(undefined);
 
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [toast, setToast] = useState<ToastProps | undefined>(undefined);
 
-  const showToast = (message: string, type: ToastProps["type"] = "info") => {
+
+
+  const showToast = useCallback((message: string, type: ToastProps["type"] = "info") => {
     setToast({ message, type });
-  };
+  }, []); // ✅ Giữ nguyên function này giữa các lần render
+
 
   const handleClose = () => setToast(undefined);
+
+  //setup to call it in Interceptor
+  useEffect(() => {
+    showToastRef = showToast; // Lưu function này vào biến global
+    return () => {
+      showToastRef = null; // Cleanup khi unmount
+      setToast(undefined)
+    };
+  }, [showToast]);
 
   return (
     <ToastContext.Provider value={{ showToast }}>
