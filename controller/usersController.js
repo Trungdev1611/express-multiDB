@@ -1,5 +1,7 @@
 import connection from "../config/db.js"
 import ExcelJS from "exceljs";
+import { Writable } from "stream";
+import { format } from "fast-csv";
 export const getUsers = async (req, res) => {  //sẽ tối ưu với where id > lastid, và TH nữa là đánh index sau
     try {
         const query = req.query
@@ -150,7 +152,6 @@ export const editUser = async (req, res) => {
 
 export const exportExcel = async (req, res) => {
     try {
-        console.log(`aaaaaaaa`)
         //sql join sẽ join 2 bảng 1 trưóc, thứ tự câu join sẽ như thứ tự viết SQL
         const sqlGetListUsers = `SELECT u.id, u.username, u.email, d.name AS department_name, r.name  AS role_name 
                                 FROM users u 
@@ -184,12 +185,59 @@ export const exportExcel = async (req, res) => {
         // Lưu file Excel vào buffer
         const buffer = await workbook.xlsx.writeBuffer();
 
-          // Gửi file Excel về client
-          res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-          res.setHeader("Content-Disposition", `attachment; filename=users.xlsx`);
-          res.send(buffer);
+        // Gửi file Excel về client
+        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        res.setHeader("Content-Disposition", `attachment; filename=users.xlsx`);
+        res.send(buffer);
     } catch (error) {
         console.error("Error exporting users:", error);
         res.status(400).json({ msg: "Export excel error" });
     }
 }
+
+export const exportCSV = async (req, res) => {
+    try {
+        // Dữ liệu giả lập (hoặc có thể lấy từ database)
+
+        const sqlGetData = `SELECT u.id, u.username, u.email, r.name, d.name
+        FROM users u
+        JOIN roles r ON u.role_id = r.id
+        JOIN department d ON d.id = u.department_id`
+        const [data] = await connection.query(sqlGetData)
+        // Mảng lưu buffer dữ liệu
+        const chunks = [];
+
+        // Tạo Writable Stream để ghi dữ liệu vào buffer
+        const writableStream = new Writable({
+            write(chunk, _, callback) {
+                chunks.push(chunk); // Lưu từng chunk vào mảng
+                callback(); // Xác nhận ghi xong
+            },
+        });
+
+        // Tạo CSV Stream
+        const csvStream = format({ headers: true, writeBOM: true });
+
+        // Kết nối CSV stream với Writable Stream
+        csvStream.pipe(writableStream);
+
+        // Ghi dữ liệu vào CSV
+        data.forEach((row) => csvStream.write(row));
+
+        // Kết thúc stream
+        csvStream.end();
+
+        // Khi quá trình ghi hoàn tất, gửi file về client
+        writableStream.on("finish", () => {
+            const csvBuffer = Buffer.concat(chunks);
+
+            res.setHeader("Content-Disposition", "attachment; filename=data.csv");
+            res.setHeader("Content-Type", "text/csv; charset=UTF-8");
+
+            res.send(csvBuffer);
+        });
+    } catch (error) {
+        console.error("Lỗi xuất CSV:", error);
+        res.status(500).json({ message: "Lỗi khi xuất CSV" });
+    }
+};

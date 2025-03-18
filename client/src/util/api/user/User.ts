@@ -1,3 +1,4 @@
+import { FileApiDownload } from "@/util/util"
 import api from "../../api"
 import { DataPagninateUser, ParamsCreateNewUser, ParamsGetUserType, PayloadDelete } from "./type"
 
@@ -24,8 +25,13 @@ class UserAPI {
       return response.data
     }
 
-    async exportExcelUsers(): Promise<DataPagninateUser> {
+    async exportExcelUsers(): Promise<FileApiDownload> {
       const response = await api.get("/users/export-excel", { responseType: "arraybuffer" })
+      return response.data
+    }
+
+    async exportCSVUsers(): Promise<FileApiDownload> {
+      const response = await api.get("/users/export-csv", { responseType: "arraybuffer" })
       return response.data
     }
   }

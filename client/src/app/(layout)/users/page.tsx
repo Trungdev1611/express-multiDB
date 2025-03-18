@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import ModalCreate from '@/components/users/ModalCreate';
 import { EditOutlined } from '@mui/icons-material';
-import { exportDataExcel } from '@/util/util';
+import { exportDataFile } from '@/util/util';
 const columns: GridColDef<(UserType)>[] = [
     {
         field: 'id', headerName: 'ID', width: 90, headerAlign: 'center',
@@ -148,7 +148,18 @@ export default function Users() {
         try {
             const data = await userAPI.exportExcelUsers()
             console.log(`data`, data)
-            await exportDataExcel(data)
+            await exportDataFile(data)
+            showToast("Export data successfully", `success`)
+        } catch (error) {
+            console.log(`error`, error)
+        }
+    }
+
+    async function exportToCSV() {
+        try {
+            const data = await userAPI.exportCSVUsers()
+            console.log(`data`, data)
+            await exportDataFile(data, `csv`)
             showToast("Export data successfully", `success`)
         } catch (error) {
             console.log(`error`, error)
@@ -163,6 +174,7 @@ export default function Users() {
                 <Button variant="outlined" onClick={() => setOpenCreate(true)}>Create New</Button>
                 <Button variant="outlined" color='error' onClick={ deleteUser}>Delete users</Button>
                 <Button variant="outlined" color='info' onClick={ exportToExcel}>Export Excel</Button>
+                <Button variant="outlined" color='info' onClick={ exportToCSV}>Export CSV</Button>
             </div>
    
             <Box sx={{ width: '100%' }}>

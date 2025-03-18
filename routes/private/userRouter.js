@@ -1,5 +1,5 @@
 import express from 'express'
-import { getUsers, getDetailUser, createUser, deleteUsers, editUser, exportExcel } from '../../controller/usersController.js'
+import { getUsers, getDetailUser, createUser, deleteUsers, editUser, exportExcel, exportCSV } from '../../controller/usersController.js'
 import { checkPermission, ROLES } from '../../middleware/checkPermission.middleware.js'
 
 const userRouter = express.Router()
@@ -7,6 +7,8 @@ const userRouter = express.Router()
 userRouter.get("/getlist", getUsers)
 
 userRouter.get(`/export-excel`, exportExcel)
+
+userRouter.get(`/export-csv`, exportCSV )
 
 userRouter.get("/:id", getDetailUser)
 

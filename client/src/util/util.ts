@@ -1,10 +1,11 @@
 import dayjs from "dayjs"
 
 //api return ra file => cần blob
-export async function exportDataExcel(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data: any,
-  name: string = `file-download${dayjs().format("DD_MM_YYYY_HH_mm_ss")}.xlsx`
+export type FileApiDownload =  string | Response | Blob | ArrayBuffer | Uint8Array
+export async function exportDataFile(
+  data: FileApiDownload,
+  type: "csv" | "xlsx" = "xlsx",
+  name: string = `file-download${dayjs().format("DD_MM_YYYY_HH_mm_ss")}`,
 ) {
   try {
     console.log("Type of data:", typeof data)
@@ -14,7 +15,13 @@ export async function exportDataExcel(
     console.log("Instance of Uint8Array:", data instanceof Uint8Array)
     console.log("Instance of Buffer:", data instanceof Buffer)
     console.log("Constructor name:", data?.constructor?.name)
-    
+
+    const mimeType =
+      type === "xlsx"
+        ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        : "text/csv; charset=UTF-8"
+
+    const fileName = `${name}.${type}` // Thêm phần mở rộng phù hợp
 
     let blob: Blob
     if (data instanceof Response) {
@@ -23,23 +30,24 @@ export async function exportDataExcel(
       blob = data // Nếu data đã là Blob, sử dụng trực tiếp
     } else if (data instanceof ArrayBuffer || data instanceof Uint8Array) {
       // Nếu là Buffer (Uint8Array hoặc ArrayBuffer), chuyển thành Blob
-      blob = new Blob([data], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      })
+      blob = new Blob([data], { type: mimeType })
+    } else if (typeof data === "string") {
+      // Nếu data là chuỗi CSV, chuyển thành Blob
+      blob = new Blob([type === "csv" ? `\uFEFF${data}` : data], { type: mimeType }) // \uFEFF để hỗ trợ UTF-8 (tiếng Việt)
     } else {
-      throw new Error("Dữ liệu không hợp lệ! Phải là Response hoặc Blob.")
+      throw new Error("Dữ liệu không hợp lệ! Phải là Response, Blob, Buffer hoặc chuỗi CSV.")
     }
 
     const url = window.URL.createObjectURL(blob)
     console.log(`url`, url)
     const a = document.createElement("a")
     a.href = url
-    a.download = name
+    a.download = fileName
     document.body.appendChild(a)
     a.click()
     window.URL.revokeObjectURL(url)
   } catch (error) {
-    console.error("Lỗi trong exportDataExcel:", error)
+    console.error("Lỗi trong exportDataFile:", error)
     throw error
   }
 }
