@@ -6,6 +6,7 @@ import authRouter from './routes/authRouter.js';
 import privateRouter from './routes/private/privateRoute.js';
 import { authMiddleWare } from './middleware/auth.middleware.js';
 import cors from "cors";
+import { logger } from './logger.js'; //logger
 
 const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 
@@ -25,6 +26,10 @@ export const DATABASES = {
   mongo: "MongoDB"
 };
 const TYPE_DATABASE = DATABASES[currentBranch] || '--not defined--';
+
+app.use((req, res, next) => {
+  logger.info(`Request: ${req.method} ${req.url}`)
+})
 
 app.use("/admin/v1/auth", authRouter)
 app.use("/admin/v1",
