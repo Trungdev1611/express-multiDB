@@ -29,6 +29,7 @@ const TYPE_DATABASE = DATABASES[currentBranch] || '--not defined--';
 
 app.use((req, res, next) => {
   logger.info(`Request: ${req.method} ${req.url}`)
+  next()
 })
 
 app.use("/admin/v1/auth", authRouter)

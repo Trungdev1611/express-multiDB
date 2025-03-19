@@ -11,7 +11,7 @@ a/ express validator
 b/ joi
 c/ tự viết middleware
 
-nhưng về cơ bản chúng đều là middleware để chèn vào giữa 
+nhưng về cơ bản chúng đều là middleware để chèn vào giữa (trong dự án này dùng joi)
 
 ### router.post("/users", validateCreateUser, createUser);
 

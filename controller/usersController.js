@@ -58,7 +58,7 @@ export const getDetailUser = async (req, res) => {
     try {
         let id = req.user.id //get from middleware token
 
-        let querySql = `Select u.*, r.name as role from users join roles where id = ?`
+        let querySql = `SELECT u.*, r.name AS role FROM users u JOIN roles r WHERE u.ID = ?`
         let [rows] = await connection.query(querySql, [id])
 
         if (rows.length === 0) {

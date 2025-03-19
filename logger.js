@@ -38,6 +38,4 @@ export const logger = createLogger({
   ],
 });
 
-// Test log
-logger.info("Ứng dụng đã khởi động! 🚀");
-logger.error("Lỗi nghiêm trọng! ❌");
+
