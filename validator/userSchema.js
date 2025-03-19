@@ -9,3 +9,14 @@ export const createUpdateUserSchema = Joi.object({
 })
 
 
+export const emailSchema = Joi.object({
+    to: Joi.string().email({tlds: {allow: true}}).required(),
+    subject: Joi.string().required(),
+    content: Joi.string().required()
+})
+
+export const sendEmailSchemaList = Joi.object({
+    listUser: Joi.array().items(Joi.string().email({tlds: {allow: true}}).required()).min(1).required(),
+    subject: Joi.string().required(),
+    content: Joi.string().required()
+})

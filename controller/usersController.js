@@ -2,6 +2,9 @@ import connection from "../config/db.js"
 import ExcelJS from "exceljs";
 import { Writable } from "stream";
 import { format } from "fast-csv";
+import { sendEmail } from "../uttil/mailer.js";
+
+
 export const getUsers = async (req, res) => {  //sẽ tối ưu với where id > lastid, và TH nữa là đánh index sau
     try {
         const query = req.query
@@ -241,3 +244,33 @@ export const exportCSV = async (req, res) => {
         res.status(500).json({ message: "Lỗi khi xuất CSV" });
     }
 };
+
+
+//send mail with node mailer - test mất 3 đến 5s một mail, khá lâu
+export async function EmailNodeMailer(req, res) {
+    try {
+        const {to, subject, content} = req.body
+        await sendEmail(to, subject, content)
+        res.status(200).json({ msg: "Send email success" })
+    } catch (error) {
+        console.log("error", error)
+        res.status(400).json({error})
+    }
+}
+
+//send email với list users thay vì 1 user (vẫn sử dụng main thread)
+export async function EmailNodeMailerListUser(req, res) {
+    try {
+        const {listUser, subject, content} = req.body
+        console.log(`listUser`, listUser)
+        let listPromise = listUser.map(user => {
+            return (sendEmail(user, subject, content))
+        })
+
+        await Promise.all(listPromise)
+        res.status(200).json({ msg: "Send list email success" })
+    } catch (error) {
+        console.log("error", error)
+        res.status(400).json({error})
+    }
+}

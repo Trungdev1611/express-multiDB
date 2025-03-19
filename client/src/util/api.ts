@@ -36,7 +36,8 @@ axiosInstance.interceptors.response.use(
         showToastRef(error.response?.data?.msg || "Something wrong happened", `error`);
       }
       // Nếu lỗi xác thực (ví dụ 401), có thể tự động chuyển hướng logout hoặc thông báo
-      if (error.response.status === 401 ) {
+      //@ts-expect-error("message key")
+      if (error.response.status === 401 || error?.response?.data?.message ===  "Invalid or expired token") {
         window.location.href = "/login"
       }
     }
