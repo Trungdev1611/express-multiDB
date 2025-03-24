@@ -3,8 +3,8 @@ import ExcelJS from "exceljs";
 import { Writable } from "stream";
 import { format } from "fast-csv";
 import { sendEmail } from "../uttil/mailer.js";
-
-
+import cron from 'node-cron'
+import dayjs from 'dayjs'
 export const getUsers = async (req, res) => {  //sẽ tối ưu với where id > lastid, và TH nữa là đánh index sau
     try {
         const query = req.query
@@ -261,16 +261,46 @@ export async function EmailNodeMailer(req, res) {
 //send email với list users thay vì 1 user (vẫn sử dụng main thread)
 export async function EmailNodeMailerListUser(req, res) {
     try {
-        const {listUser, subject, content} = req.body
-        console.log(`listUser`, listUser)
-        let listPromise = listUser.map(user => {
-            return (sendEmail(user, subject, content))
-        })
+        const {listUser, subject, content, timeout, isCronjob} = req.body
 
-        await Promise.all(listPromise)
-        res.status(200).json({ msg: "Send list email success" })
+        if(!timeout && !isCronjob) {
+            console.log(`listUser`, listUser)
+            let listPromise = listUser.map(user => {
+                return (sendEmail(user, subject, content))
+            })
+    
+            await Promise.all(listPromise)
+            return res.status(200).json({ msg: "Send list email success" })
+        }
+        else if (timeout && isCronjob) { //npm install node-cron - cronjob nhưng vẫn chạy trên main thread
+            const delaySeconds = Math.max(1, timeout/1000)
+            const cronjobExpression = `*/${Math.floor(delaySeconds/60)} * * * *` //biểu thức này có nghĩa chạy sau delaySeconds/60 phút
+            //lên lịch
+            cron.schedule(cronjobExpression, async() => {
+                logger.info(`bắt đầu lên lịch gửi mail: Mail sẽ được gửi sau ${delaySeconds} from ${dayjs().format(`DD/MM/YYYY hh:mm:ss`)}`)
+                await Promise.all(listUser.map(user => {
+                    console.log(`Đang lên lịch gửi mail user: ${user}`)
+                    return sendEmail(user, subject, content)}))
+            })
+            return res.status(200).json({ msg: `Email will be send with cronjob ${Math.floor(delaySeconds/60)}  seconds`})
+            
+        }
+        else if(timeout){
+            //có time out, set lịch sau thời gian timeout
+            listUser.forEach(user => {
+                setTimeout(() => {sendEmail(user, subject, content)}, timeout)
+            })
+            return res.status(200).json({ msg: `Email will be send after ${timeout / 1000 } seconds`})
+        }
+        else {
+            // các trường hợp còn lại
+            return res.status(200).json({msg: "not belong any cases"})
+        }
+    
     } catch (error) {
         console.log("error", error)
-        res.status(400).json({error})
+        return res.status(400).json({error})
     }
 }
+
+

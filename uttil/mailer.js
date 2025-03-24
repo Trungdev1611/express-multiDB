@@ -21,3 +21,5 @@ export async function sendEmail(to, subject, content) {
     })
     console.log(`✅ Email sent: ${to}`, info.messageId)
 }
+
+
