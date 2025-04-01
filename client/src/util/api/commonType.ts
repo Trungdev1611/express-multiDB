@@ -3,3 +3,5 @@ export interface PagninateType {
     pageSize: number,
     total:  number
 }
+
+export interface PayloadPaginate {page: number, pageSize?: number}

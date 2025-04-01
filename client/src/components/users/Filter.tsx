@@ -64,7 +64,12 @@ const Filter = (props: FilterUserProps) => {
                     control={control}
                     defaultValue={""}
                     render={({ field }) => (
-                        <FormFieldSelect label={<span className='min-w-[90px] inline-block'>Department</span>} options={data.department} {...field} />
+                        <FormFieldSelect 
+                        label={<span className='min-w-[90px] inline-block'>Department</span>} 
+                        options={data.department}
+                        isIntinify
+                        fetchMoreData={departmentAPI.getDepartmentList}
+                        {...field} />
                     )}
                 />
 

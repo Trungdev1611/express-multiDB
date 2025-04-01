@@ -25,7 +25,7 @@ export const logger = createLogger({
       datePattern: "YYYY-MM-DD",
       level: "error",
       format: format.combine(format.uncolorize(), format.timestamp(), format.printf(({ timestamp, level, message }) => `${timestamp} [${level.toUpperCase()}]: ${message}`)),
-      maxFiles: "7d", // Chỉ giữ lại log trong 7 ngày
+      // maxFiles: "7d", // Chỉ giữ lại log trong 7 ngày
     }),
 
     // Ghi tất cả log vào file combined.log theo ngày
@@ -33,7 +33,7 @@ export const logger = createLogger({
       filename: "logs/combined-%DATE%.log", // Tự động tạo file theo ngày
       datePattern: "YYYY-MM-DD",
       format: format.combine(format.uncolorize(), format.timestamp(), format.printf(({ timestamp, level, message }) => `${timestamp} [${level.toUpperCase()}]: ${message}`)),
-      maxFiles: "7d", // Chỉ giữ lại log trong 7 ngày
+      // maxFiles: "7d", // Chỉ giữ lại log trong 7 ngày
     }),
   ],
 });

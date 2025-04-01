@@ -21,8 +21,8 @@ export interface UserType {
   export interface ParamsGetUserType {
   page: number;
   pageSize: number;
-  sortBy: string;
-  sort: string;
+  sortBy?: string;
+  sort?: string;
 }
 
 export interface FilterUser {
