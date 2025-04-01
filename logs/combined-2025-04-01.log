@@ -141,3 +141,6 @@
 2025-04-01 14:59:50 [INFO]: Request: GET /admin/v1/users/11000
 2025-04-01 15:11:55 [INFO]: Request: GET /admin/v1/users/11000
 2025-04-01 16:05:05 [INFO]: Request: GET /admin/v1/users/11000
+2025-04-01 16:24:22 [INFO]: Request: GET /admin/v1/department/getlist
+2025-04-01 16:24:22 [INFO]: Request: GET /admin/v1/role/getlist
+2025-04-01 16:24:22 [INFO]: Request: GET /admin/v1/users/getlist?page=1&pageSize=10&sortBy=id&sort=asc&search=&department_id=103&role_id=

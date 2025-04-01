@@ -3,16 +3,16 @@ import connection from "../config/db.js"
 import AppError from "../uttil/AppError.js"
 
 export const register = async (req, res) => {
-    try {
+
         const { username, email, password } = req.body
         if (!username || !password || !email) {
-            return res.status(400).json({ message: "Your information is not valid" })
+            throw new AppError("Your information is not valid", 400)
         }
 
         const checkSql = `SELECT id FROM users WHERE username = ? OR email = ?`;
         const [existingUser] = await connection.execute(checkSql, [username, email]);
         if (existingUser.length > 0) {
-            return res.status(400).json({ message: "Username or email already exists" });
+            throw new AppError("Username or email already exists", 400)
         }
 
         // Nếu không trùng, tiến hành insert
@@ -20,13 +20,9 @@ export const register = async (req, res) => {
         await connection.execute(insertSql, [username, password, email]);
 
         return res.status(201).json({ message: "User registered successfully" });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Internal server error" });
     }
 
 
-}
 
 export const login = async (req, res) => {
         const { username, password } = req.body
