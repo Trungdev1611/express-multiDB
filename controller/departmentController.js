@@ -1,7 +1,7 @@
 import connection from "../config/db.js"
 
 export const getListDepartment = async(req, res) => {
-    try {
+   
         const {page = 1, pageSize = 20, sortBy = "id", search = ""} = req.query
 
         const offset = (page- 1) * 20
@@ -11,10 +11,6 @@ export const getListDepartment = async(req, res) => {
         return res.status(200).json({
             data: rows
         })
-    } catch (error) {
-        console.log("error", error)
-        res.status(400).json({ message: error.message })
-    }
 }
 
 

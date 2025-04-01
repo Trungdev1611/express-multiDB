@@ -5,8 +5,9 @@ import { format } from "fast-csv";
 import { sendEmail } from "../uttil/mailer.js";
 import cron from 'node-cron'
 import dayjs from 'dayjs'
+import AppError from "../uttil/AppError.js";
 export const getUsers = async (req, res) => {  //sẽ tối ưu với where id > lastid, và TH nữa là đánh index sau
-    try {
+
         const query = req.query
         const sort = query.sort === "asc" ? "asc" : "desc"
         let { page = 1, pageSize = 10, sortBy = "id", search = "", department_id, role_id } = req.query
@@ -50,29 +51,20 @@ export const getUsers = async (req, res) => {  //sẽ tối ưu với where id >
                 ...total[0]
             }
         })
-    } catch (error) {
-        console.log("error", error)
-        res.status(400).json({ message: error.message })
-    }
+
 }
 
 
 export const getDetailUser = async (req, res) => {
-    try {
+
         let id = req.user.id //get from middleware token
 
         let querySql = `SELECT u.*, r.name AS role FROM users u JOIN roles r WHERE u.ID = ?`
         let [rows] = await connection.query(querySql, [id])
-
         if (rows.length === 0) {
-            return res.status(404).json({ message: "User not found" });
+            throw new AppError("user not found", 400)
         }
-
         return res.status(200).json({ data: rows[0] });
-    } catch (error) {
-        console.log("error", error)
-        res.status(400).json({ message: error.message })
-    }
 }
 
 export const createUser = async (req, res) => {
@@ -132,7 +124,7 @@ export const deleteUsers = async (req, res) => {
 }
 
 export const editUser = async (req, res) => {
-    try {
+
         const id = req.params.id
 
         const sqlCheckexist = `SELECT * FROM users WHERE id  = ?`
@@ -147,14 +139,10 @@ export const editUser = async (req, res) => {
         const [result] = await connection.query(sqlUpdate, [username, password, email, department_id, role_id, id])
         console.log(`result`, result, dataUserExist)
         return res.status(200).json({ msg: "Update user sucessfully" })
-    } catch (error) {
-        res.status(400).json({ message: error.message })
-    }
 }
 
 
 export const exportExcel = async (req, res) => {
-    try {
         //sql join sẽ join 2 bảng 1 trưóc, thứ tự câu join sẽ như thứ tự viết SQL
         const sqlGetListUsers = `SELECT u.id, u.username, u.email, d.name AS department_name, r.name  AS role_name 
                                 FROM users u 
@@ -192,14 +180,10 @@ export const exportExcel = async (req, res) => {
         res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         res.setHeader("Content-Disposition", `attachment; filename=users.xlsx`);
         res.send(buffer);
-    } catch (error) {
-        console.error("Error exporting users:", error);
-        res.status(400).json({ msg: "Export excel error" });
-    }
+    
 }
 
 export const exportCSV = async (req, res) => {
-    try {
         // Dữ liệu giả lập (hoặc có thể lấy từ database)
 
         const sqlGetData = `SELECT u.id, u.username, u.email, r.name, d.name
@@ -239,10 +223,6 @@ export const exportCSV = async (req, res) => {
 
             res.send(csvBuffer);
         });
-    } catch (error) {
-        console.error("Lỗi xuất CSV:", error);
-        res.status(500).json({ message: "Lỗi khi xuất CSV" });
-    }
 };
 
 

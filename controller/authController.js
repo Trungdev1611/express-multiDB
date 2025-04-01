@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken"
 import connection from "../config/db.js"
+import AppError from "../uttil/AppError.js"
 
 export const register = async (req, res) => {
     try {
@@ -28,16 +29,15 @@ export const register = async (req, res) => {
 }
 
 export const login = async (req, res) => {
-    try {
         const { username, password } = req.body
         const query = ` select * from users where username = ? limit 1`
         const [rows] = await connection.execute(query, [username]);
         if (!rows) {
-            return res.status(400).json({ message: "username is not correct" })
+            throw new AppError("username is not correct", 400)
         }
         const data = rows?.[0]
         if (data?.password !== password) {
-            return res.status(400).json({ message: "password is not correct" })
+            throw new AppError("password is not correct", 400)
         }
 
         const JWT_SECRET = process.env.JWT_SECRET
@@ -45,10 +45,6 @@ export const login = async (req, res) => {
             expiresIn: '7d' 
         } );
         res.status(200).json({ message: "login sucessfully", token: access_token })
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Internal server error" });
-    }
 
 }
 

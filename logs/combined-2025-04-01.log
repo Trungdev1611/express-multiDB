@@ -128,3 +128,16 @@
 2025-04-01 13:54:34 [INFO]: Request: GET /admin/v1/department/getlist
 2025-04-01 13:54:34 [INFO]: Request: GET /admin/v1/role/getlist
 2025-04-01 13:54:34 [INFO]: Request: GET /admin/v1/users/getlist?page=1&pageSize=10&sortBy=id&sort=asc&search=
+2025-04-01 14:50:55 [INFO]: Request: GET /admin/v1/users/11000
+2025-04-01 14:51:06 [INFO]: Request: GET /admin/v1/department/getlist
+2025-04-01 14:51:06 [INFO]: Request: GET /admin/v1/role/getlist
+2025-04-01 14:51:06 [INFO]: Request: GET /admin/v1/users/getlist?page=1&pageSize=10&sortBy=id&sort=asc&search=
+2025-04-01 14:51:22 [INFO]: Request: GET /admin/v1/department/getlist
+2025-04-01 14:51:22 [INFO]: Request: GET /admin/v1/role/getlist
+2025-04-01 14:51:22 [INFO]: Request: GET /admin/v1/users/getlist?page=1&pageSize=10&sortBy=id&sort=asc&search=
+2025-04-01 14:51:36 [INFO]: Request: GET /admin/v1/users/11000
+2025-04-01 14:53:12 [INFO]: Request: GET /admin/v1/users/11000
+2025-04-01 14:54:46 [INFO]: Request: GET /admin/v1/users/11000
+2025-04-01 14:59:50 [INFO]: Request: GET /admin/v1/users/11000
+2025-04-01 15:11:55 [INFO]: Request: GET /admin/v1/users/11000
+2025-04-01 16:05:05 [INFO]: Request: GET /admin/v1/users/11000

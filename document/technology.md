@@ -37,4 +37,4 @@ nhưng về cơ bản chúng đều là middleware để chèn vào giữa (tron
     | ----------- Giờ (0 - 23)  
     ------------- Phút (0 - 59)  
 
- ## 7. 
+ ## 7. Bắt Error toàn cục với catchAsync, AppError, globalHandler

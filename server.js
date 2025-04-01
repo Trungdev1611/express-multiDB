@@ -7,6 +7,7 @@ import privateRouter from './routes/private/privateRoute.js';
 import { authMiddleWare } from './middleware/auth.middleware.js';
 import cors from "cors";
 import { logger } from './logger.js'; //logger
+import { globalErrorHandler } from './middleware/globalHandler.js';
 
 const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
 
@@ -36,4 +37,8 @@ app.use("/admin/v1/auth", authRouter)
 app.use("/admin/v1",
   authMiddleWare,
    privateRouter)
+
+
+   //bắt lỗi toàn cục ở đây
+   app.use(globalErrorHandler)
 app.listen(PORT, () => console.log(`Server running on port ${PORT} using database: ${TYPE_DATABASE}`));
