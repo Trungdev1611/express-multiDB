@@ -1,7 +1,7 @@
 'use client'
 
 import { Dispatch, SetStateAction, useState } from "react";
-import { List, ListItem, ListItemText, IconButton, ListItemButton, ListItemIcon, } from "@mui/material";
+import { List, ListItemText, IconButton, ListItemButton, ListItemIcon, } from "@mui/material";
 import {
     Menu,
     ChevronLeft, 
@@ -10,7 +10,8 @@ import {
     Apartment,
     Security,
     People,
-    Group
+    Group,
+    // ChevronLeftOutlined
 } from '@mui/icons-material';
 import { useRouter } from "next/navigation";
 
@@ -27,7 +28,7 @@ const menuList = [
     { name: "Employees", url: "/employees", icon: <People /> },
     { name: "Group", url: "/group", icon: <Group /> },
     { name: "Menu", url: "/menu", icon: <Menu /> },
-    { name: "Chevron", url: "/chevron", icon: <ChevronLeft /> },
+    { name: "Chevron", url: "/chevron", icon: <Inbox /> },
     { name: "Inbox", url: "/inbox", icon: <Inbox /> },
 ]
 function Sidebar(props: SideBarProps) {

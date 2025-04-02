@@ -131,7 +131,7 @@ export const editUser = async (req, res) => {
         const [dataUserExist] = await connection.query(sqlCheckexist, [id])
         console.log(`id`, id, dataUserExist)
         if (!id || !dataUserExist) {
-            return res.status(400).json({ msg: "id is not found" })
+            throw new AppError("id is not found", 400)
         }
         const { username, password, email, department_id, role_id } = req.body
         console.log(`username, password, email, department_id, role_id`, username, password, email, department_id, role_id)
