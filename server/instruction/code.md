@@ -1,0 +1,3 @@
+# 1. Cài nestjs-CLI để tạo nhanh chóng các controller, project, services....
+npm i -g @nestjs/cli 
+yarn new .
