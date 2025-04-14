@@ -1,8 +1,18 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import 'reflect-metadata';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+    // Đặt ValidationPipe toàn cục
+    app.useGlobalPipes(new ValidationPipe({
+      transform: true,  // Chuyển đổi dữ liệu vào đúng kiểu DTO
+      whitelist: true,  // Tự động loại bỏ các trường không được định nghĩa trong DTO
+      forbidNonWhitelisted: true, // Báo lỗi nếu có trường không có trong DTO
+    }));
+
   await app.listen(process.env.PORT ?? 3002);
 }
 bootstrap();
