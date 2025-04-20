@@ -11,8 +11,13 @@ export class UserService {
         private userRepository: Repository<Users>) {
 
         }
-       async findAll() {
-            return await this.userRepository.find() //getAll
+       async findAll(page: number = 1, limit: number = 10) {
+         //getAll là find() còn findAndCount là phân trang và tính tổng
+            return await this.userRepository.findAndCount({
+                skip: (page - 1) * limit,
+                take: limit,
+            }
+            )
         }
 
         async findOne(idUser: number) {
