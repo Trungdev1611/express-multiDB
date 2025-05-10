@@ -1,0 +1,15 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "143.198.209.58",
+            "port": 3336,
+            "driver": "PostgreSQL",
+            "username": "postgres",
+            "database": "postgres",
+            "name": "saka-production",
+            "connectionTimeout": 20,
+            "password": "ZXYNp65R69bSdZdU"
+        }
+    ]
+}

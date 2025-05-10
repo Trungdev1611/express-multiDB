@@ -1,8 +1,9 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Users } from "./users.entity";
 import { Repository } from "typeorm";
 import { UpdateUserDTO, UserCreateDTO } from "./dto/create";
+import { CustomException } from "src/common/customException/CustomException";
 
 @Injectable()
 export class UserService {
@@ -20,7 +21,7 @@ export class UserService {
                 where: {id: idUser}
             })
             if(!user) {
-                throw new BadRequestException(`user is not found with id: ${idUser}`)
+                throw new CustomException(`user is not found with id: ${idUser}`, 404)
             }
             return user
         }
@@ -32,7 +33,7 @@ export class UserService {
 
         async editUser(idUser: number, userData:UpdateUserDTO ) {
             if(Object.values(userData)?.length < 1) {
-                throw new BadRequestException(`data update cannot be empty`)
+                throw new CustomException(`data update cannot be empty`)
             }
             const user =await  this.findOne(idUser)
             return this.userRepository.save({...user, ...userData})
