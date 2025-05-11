@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Users } from './users.entity';
+import { loginDTO } from '../auth/dto/loginDTO';
 
 @Injectable()
 export class UsersRepository {
@@ -21,6 +22,15 @@ export class UsersRepository {
     return this.repo.findOne({
       where: { id: idUser },
     });
+  }
+
+  async findByEmailAndPass(loginData: loginDTO) {
+    return this.repo.findOne({
+      where: {
+        email: loginData.email,
+        password: loginData.password
+      }
+    })
   }
 
   async create(userData: Partial<Users>) {
