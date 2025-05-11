@@ -3,6 +3,7 @@
 /node_modules
 /build
 /.next
+/.next
 **/node_modules
 # Logs
 logs

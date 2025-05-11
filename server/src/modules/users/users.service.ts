@@ -4,27 +4,22 @@ import { Users } from "./users.entity";
 import { Repository } from "typeorm";
 import { UpdateUserDTO, UserCreateDTO } from "./dto/create";
 import { CustomException } from "src/common/customException/CustomException";
+import { UsersRepository } from "./user.repository";
 
 @Injectable()
 export class UserService {
-    constructor(
-        @InjectRepository(Users)
-        private userRepository: Repository<Users>) {
+constructor(
+        private userRepository: UsersRepository) {
 
         }
-       async findAll(page: number = 1, limit: number = 10) {
+       async findAll(page: number, limit: number) {
          //getAll là find() còn findAndCount là phân trang và tính tổng
-            return await this.userRepository.findAndCount({
-                skip: (page - 1) * limit,
-                take: limit,
-            }
-            )
+            return await this.userRepository.findAllAndCount(page, limit)
+            
         }
 
         async findOne(idUser: number) {
-            const user =  await this.userRepository.findOne({
-                where: {id: idUser}
-            })
+            const user =  await this.userRepository.findOne(idUser)
             if(!user) {
                 throw new CustomException(`user is not found with id: ${idUser}`, 404)
             }
@@ -32,7 +27,7 @@ export class UserService {
         }
 
         async createNew(userData: UserCreateDTO) {
-            const user = this.userRepository.create({...userData, created_at: new Date(), updated_at: new Date()})
+            const user = await this.userRepository.create(userData)
             return await this.userRepository.save(user)
         }
 
@@ -41,7 +36,7 @@ export class UserService {
                 throw new CustomException(`data update cannot be empty`)
             }
             const user =await  this.findOne(idUser)
-            return this.userRepository.save({...user, ...userData})
+            return this.userRepository.save(user)
         }
 
         async deleteUser(idUser: number) {

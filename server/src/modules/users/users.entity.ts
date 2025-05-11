@@ -1,23 +1,33 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
+} from 'typeorm';
 
 @Entity()
 export class Users {
-    //don't need constructor here
-    @PrimaryGeneratedColumn()
-    id: number;
+  //don't need constructor here
+  @PrimaryGeneratedColumn()
+  id?: number;
 
-    @Column()
-    username: string;
+  @Column()
+  username: string;
 
-    @Column()
-    email: string;
+  @Column()
+  email: string;
 
-    @Column()
-    password: string;
+  @Column()
+  password: string;
 
-    @Column()
-    created_at: Date;
+  @CreateDateColumn()
+  created_at: Date;
 
-    @Column()
-    updated_at: Date
+  @UpdateDateColumn()
+  updated_at: Date;
+
+
 }
