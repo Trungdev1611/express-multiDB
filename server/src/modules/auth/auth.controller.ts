@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post, Req } from "@nestjs/common";
+import { Body, Controller, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { loginDTO } from "./dto/loginDTO";
 import { BaseDTO } from "../Base/BaseDTO";
 
-@Controller("auth")
+@Controller("v1/auth")
 export class AuthController extends BaseDTO{
   constructor (private authService: AuthService) {super()}
 

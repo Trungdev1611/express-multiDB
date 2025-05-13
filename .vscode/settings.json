@@ -10,6 +10,17 @@
             "name": "saka-production",
             "connectionTimeout": 20,
             "password": "ZXYNp65R69bSdZdU"
+        },
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "multiDb-Nest",
+            "username": "myuser",
+            "password": "mypassword",
+            "connectionTimeout": 30,
+            "database": "nestjs_project"
         }
     ]
 }

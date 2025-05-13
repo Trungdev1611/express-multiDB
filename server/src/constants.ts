@@ -8,6 +8,7 @@ export const DATA_CONSTANT = {
     db_user_name: process.env.DATABASE_USER,
     db_pass: process.env.DATABASE_PASSWORD,
     db_name: process.env.DATABASE_NAME,
+    jwt_scret: process.env.JWT_NEST || 'jwt_nest',
 
 }
 

@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { UserRole } from '../users.entity';
 
 export class UserCreateDTO {
   @IsNotEmpty()
@@ -10,5 +11,9 @@ export class UserCreateDTO {
 
   @IsNotEmpty()
   password: string;
+
+  @IsEnum(UserRole)
+  @IsOptional()
+  role?: UserRole
 }
 export type UpdateUserDTO = Partial<UserCreateDTO>;

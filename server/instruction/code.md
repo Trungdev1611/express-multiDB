@@ -55,8 +55,17 @@ export class User {
 
 npm run migration:generate -- -n CreateUserTable
 
+d. Add JWT
+yarn add @nestjs/jwt @nestjs/passport passport passport-jwt
+
 # Các bước cụ thể
 Viết entity
 generate migration tương ứng với entity @Entity()
 run migration
 revert migration nếu cần
+
+# 5. Login với jwt
+1. người dùng gửi request từ auth-controller
+2. controller đi request tới auth-service
+3. authservice xác minh user và gọi jwt-service từ passport-jwt để sign
+4. tạo file jwt-strategy, để validate cho request tiếp theo có jwt, lấy thông tin user và gán vào request

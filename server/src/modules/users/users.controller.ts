@@ -7,13 +7,15 @@ import {
   Patch,
   Post,
   Query,
-  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './users.service';
 import { UpdateUserDTO, UserCreateDTO } from './dto/create';
 import { BaseDTO } from '../Base/BaseDTO';
-
-@Controller('users')
+//add authGuard để sử dụng jwt
+import { AuthGuard } from '@nestjs/passport';
+@Controller('v1/users')
+@UseGuards(AuthGuard('jwt')) 
 export class UserController extends BaseDTO {
   //extends ở đây để chuẩn hoá response
   constructor(private userService: UserService) {

@@ -1,7 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { Users } from "./users.entity";
-import { Repository } from "typeorm";
 import { UpdateUserDTO, UserCreateDTO } from "./dto/create";
 import { CustomException } from "src/common/customException/CustomException";
 import { UsersRepository } from "./user.repository";
@@ -36,7 +33,7 @@ constructor(
                 throw new CustomException(`data update cannot be empty`)
             }
             const user =await  this.findOne(idUser)
-            return this.userRepository.save(user)
+            return this.userRepository.save({...user, ...userData})
         }
 
         async deleteUser(idUser: number) {
