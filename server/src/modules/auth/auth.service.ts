@@ -3,6 +3,7 @@ import { UsersRepository } from "../users/user.repository";
 import { loginDTO } from "./dto/loginDTO";
 import { CustomException } from "src/common/customException/CustomException";
 import { JwtService } from '@nestjs/jwt';
+import { PayloadJwt } from "./jwtStrategy";
 @Injectable()
 export class AuthService {
   constructor (
@@ -17,7 +18,7 @@ export class AuthService {
       }
 
       //create payload jwt
-      const payload = {emailUser: user.email, id: user.id}
+      const payload: PayloadJwt = {emailUser: user.email, id: user.id, role: user.role}
       return {
         access_token:  this.jwtService.sign(payload),
       };

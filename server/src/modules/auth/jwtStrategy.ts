@@ -4,9 +4,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { DATA_CONSTANT } from 'src/constants';
 
-interface PayloadJwt {
+export interface PayloadJwt {
     emailUser: string;
     id: number | undefined;
+    role: string
 }
 
 @Injectable()
@@ -21,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
  // Trả về dữ liệu sẽ được gắn vào req.user trong validate từ hàm sign
    validate(payload: PayloadJwt) {
-    console.log()
-    return  { userId: payload.emailUser, username: payload.id };
+    console.log(`payload`, payload)
+    return  payload;
   }
 }

@@ -14,6 +14,9 @@ import { UpdateUserDTO, UserCreateDTO } from './dto/create';
 import { BaseDTO } from '../Base/BaseDTO';
 //add authGuard để sử dụng jwt
 import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/common/guards/RoleGuard';
+import { Roles } from 'src/common/decorators/Role.decorator';
+import { JwtAuthGuard } from '../auth/JwtAuthGuard';
 @Controller('v1/users')
 @UseGuards(AuthGuard('jwt')) 
 export class UserController extends BaseDTO {
@@ -49,6 +52,9 @@ export class UserController extends BaseDTO {
     );
   }
 
+
+  @UseGuards(RolesGuard, JwtAuthGuard) //phải đính kèm dòng này khi dùng phân quyền
+  @Roles("admin") //chỉ cho phép admin xoá
   @Delete('delete/:id')
   async delete(@Param(`id`) id: number) {
     return super.successResponse(await this.userService.deleteUser(id));
