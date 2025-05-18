@@ -10,8 +10,8 @@ async function bootstrap() {
     // Đặt ValidationPipe toàn cục
     app.useGlobalPipes(new ValidationPipe({
       transform: true,  // Chuyển đổi dữ liệu vào đúng kiểu DTO
-      whitelist: true,  // Tự động loại bỏ các trường không được định nghĩa trong DTO
-      forbidNonWhitelisted: true, // Báo lỗi nếu có trường không có trong DTO
+      whitelist: false,  // Tự động loại bỏ các trường không được định nghĩa trong DTO hoặc không
+      forbidNonWhitelisted: false, // Báo lỗi hoặc không nếu có trường không có trong DTO
     }));
 
     const PORT = process.env.PORT || 3002
