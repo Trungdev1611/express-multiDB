@@ -62,4 +62,10 @@ export class UserOrmController {
   delete(@Param('id') id: number) {
     return this.userOrmService.delete(id);
   }
+
+  //onetoone
+  @Get('employee_and_code')
+  getEmployeeOnetoOne() {
+    return this.userOrmService.getEmployeeAndCode()
+  }
 }
