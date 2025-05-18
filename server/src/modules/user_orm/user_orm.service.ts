@@ -3,6 +3,8 @@ import { UserOrmRepository } from './user_orm.repository';
 import { CreateUserDto } from './dto/createUser.dto';
 import { DataSource } from 'typeorm';
 import { Employee } from '../onetoone_relation/employee.entity';
+import { GalleryEntity } from '../manytoone/Gallery.entity';
+import { ImageEntity } from '../manytoone/Image.entity';
 
 
 @Injectable()
@@ -49,11 +51,26 @@ export class UserOrmService {
   }
 
   //onetoone
-  getEmployeeAndCode() {
-    return this.dataSource
+  async getEmployeeAndCode() {
+    return await this.dataSource
     .getRepository(Employee)
     .createQueryBuilder('employee')
-    .leftJoinAndSelect('employee.code_employee', "code_id")
+    .leftJoinAndSelect('employee.code_employee', "code_employee")
+    .getMany()
+  }
+
+  //
+  async getGalleryImages() {
+    return await this.dataSource
+    .getRepository(GalleryEntity)
+    .createQueryBuilder('gallery')
+    .leftJoinAndSelect('gallery.images', "image")
+    .getMany()
+  }
+
+  async getImageGallery() {
+    return await this.dataSource.getRepository(ImageEntity)
+    .createQueryBuilder("image").leftJoinAndSelect("image.gallery", "gallery")
     .getMany()
   }
 }

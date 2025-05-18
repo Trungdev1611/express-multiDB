@@ -21,7 +21,7 @@ export class UserOrm {
     @OneToMany(() => TaskEntity, (task) => task.userOrm, {
         cascade: ['insert', 'remove']
     })
-    tasks: TaskEntity
+    tasks: TaskEntity[]
 
     @CreateDateColumn()
     created_at: Date

@@ -68,4 +68,14 @@ export class UserOrmController {
   getEmployeeOnetoOne() {
     return this.userOrmService.getEmployeeAndCode()
   }
+
+  @Get('onetomany-gallery-images')
+  async getGalleryImages() {
+    return await this.userOrmService.getGalleryImages()
+  }
+
+  @Get("manytoone-image-gallery")
+  async getImageGallery() {
+    return await this.userOrmService.getImageGallery()
+  }
 }
