@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
   Query,
 } from '@nestjs/common';
@@ -38,15 +37,15 @@ export class UserOrmController {
   ) {
     return await this.userOrmService.findOneBy(query.firstname, query.lastname);
   }
-  @Get('detail/:id')
-  findOne(@Param('id') id: string) {
-    return this.userOrmService.findOne(+id);
-  }
+  // @Get('detail/:id')
+  // findOne(@Param('id') id: string) {
+  //   return this.userOrmService.findOne(+id);
+  // }
 
-  @Post('create_new')
-  async createUser(@Body() data:CreateUserDto ) {
+  // @Post('create_new')
+  // async createUser(@Body() data:CreateUserDto ) {
 
-  }
+  // }
  
 
   // @Patch(':id')
@@ -77,5 +76,15 @@ export class UserOrmController {
   @Get("manytoone-image-gallery")
   async getImageGallery() {
     return await this.userOrmService.getImageGallery()
+  }
+
+  @Get("manytomany-student-courses")
+  async getStudentAndItsCourses() {
+    return await this.userOrmService.getStudentAndItsCourses()
+  }
+  
+  @Get("manytomany-course-students")
+  async getCourseAndItsStudents() {
+    return await this.userOrmService.getCourseAndItsStudents()
   }
 }
