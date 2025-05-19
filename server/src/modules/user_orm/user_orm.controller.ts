@@ -87,4 +87,16 @@ export class UserOrmController {
   async getCourseAndItsStudents() {
     return await this.userOrmService.getCourseAndItsStudents()
   }
+
+  @Get('creat-data-self-join')
+    async createDataCommentSelfJoin() {
+    return await this.userOrmService.createDataCommentSelfJoin()
+  }
+
+  @Get('get-tree-comment')
+      async getTreeComments() {
+    return await this.userOrmService.getTreeComment()
+  }
+
+ 
 }
