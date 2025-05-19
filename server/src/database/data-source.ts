@@ -5,9 +5,9 @@ console.log(`__dirname + '/../migrations`, __dirname,  )
 const AppDataSource = new DataSource({
   type: 'postgres',
   host: DATA_CONSTANT.db_host || "localhost",
-  port: 3336,
-  username: 'postgres',
-  password:  "mysecretpassword",
+  port: 5432,
+  username: 'myuser',
+  password:  "mypassword",
   database:  "learn_typeorm",
  entities: [__dirname + '/../**/*.entity{.ts,.js}'], //dirname là thư mục chưa data-source file (file cấu hình database này)
   migrations: [__dirname + '/migrations/*.{js,ts}'],

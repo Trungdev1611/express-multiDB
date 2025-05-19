@@ -82,9 +82,19 @@ export class UserOrmController {
   async getStudentAndItsCourses() {
     return await this.userOrmService.getStudentAndItsCourses()
   }
-  
+
   @Get("manytomany-course-students")
   async getCourseAndItsStudents() {
     return await this.userOrmService.getCourseAndItsStudents()
+  }
+
+  @Get("add-comment-data")
+  async addCommentData() {
+    return await this.userOrmService.createDataCommentSelfJoin()
+  }
+
+  @Get("getTree-comment")
+  async getTreeCommentSeltJoin() {
+    return await this.userOrmService.getTreeComment()
   }
 }
