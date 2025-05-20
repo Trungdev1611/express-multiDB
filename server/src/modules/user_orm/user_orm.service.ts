@@ -7,7 +7,7 @@ import { GalleryEntity } from '../manytoone/Gallery.entity';
 import { ImageEntity } from '../manytoone/Image.entity';
 import { Student } from '../manytomany/Student.entity';
 import { Course } from '../manytomany/Course.entity';
-import { CommentEntity } from '../self-reference/Comment.entity';
+import { CommentEntity } from '../self-join/Comment.entity';
 
 
 @Injectable()
@@ -103,46 +103,51 @@ export class UserOrmService {
     .getMany()
   }
 
-  //self-join
   async createDataCommentSelfJoin() {
-    const comment = new CommentEntity()
-    comment.content = "root-comment"
+  const comment = new CommentEntity();
+  comment.content = "root-comment";
 
-    //comment level1
-    const childComment1Lv1 = new CommentEntity()
-    childComment1Lv1.content = "child-comment1-level1"
-    const childComment2Lv1 = new CommentEntity()
-    childComment2Lv1.content = "child-comment2-level1"
+  const childComment1Lv1 = new CommentEntity();
+  childComment1Lv1.content = "child-comment1-level1";
+  childComment1Lv1.parentComment = comment; // gán parent
 
-    comment.childrenComment = [childComment1Lv1, childComment2Lv1]
-    childComment1Lv1.parentComment = comment
-    childComment2Lv1.parentComment = comment
+  const childComment2Lv1 = new CommentEntity();
+  childComment2Lv1.content = "child-comment2-level1";
+  childComment2Lv1.parentComment = comment;
 
-    //comment level2
-    const grandChild1 = new CommentEntity()
-    const grandChild2 = new CommentEntity()
-    grandChild1.content = "grandChild1"
-    grandChild2.content = "grandChild2"
+  const grandChild1 = new CommentEntity();
+  grandChild1.content = "grandChild1";
+  grandChild1.parentComment = childComment2Lv1;
 
-    childComment2Lv1.childrenComment = [grandChild1, grandChild2]
-    grandChild2.parentComment = childComment2Lv1
-    grandChild1.parentComment = childComment1Lv1
+  const grandChild2 = new CommentEntity();
+  grandChild2.content = "grandChild2";
+  grandChild2.parentComment = childComment2Lv1;
 
-  
+  const repo = this.dataSource.getRepository(CommentEntity);
 
-    const repo = this.dataSource.getRepository(CommentEntity);
-    await repo.save(comment); // ID tự sinh ra
-    await repo.save([childComment1Lv1, childComment2Lv1]);
-    await repo.save([grandChild1, grandChild2]);
+  // save theo thứ tự từ trên xuống, hoặc dùng cascade nếu setup rồi
+  await repo.save(comment); // ID tự sinh ra
+  await repo.save([childComment1Lv1, childComment2Lv1]);
+  await repo.save([grandChild1, grandChild2]);
 
-    return true;
-  }
+  return true;
+}
 
-  async getTreeComment() {
-    return  await this.dataSource.getRepository(CommentEntity).findOne({
-      where: { parentComment: IsNull() },
-      relations: ['children', 'children.children'],
-    });
-  }
+async getTreeComment() {
+  // return await this.dataSource.getRepository(CommentEntity)
+  // .find({
+  //   where: {
+  //     parentComment: IsNull(),
+  //   },
+  //   relations: ["childrenComment", "childrenComment.childrenComment"]
+  // })
+
+  return await this.dataSource.getRepository(CommentEntity)
+  .createQueryBuilder("comment")
+  .leftJoinAndSelect("comment.childrenComment", "childLevel1")
+  .leftJoinAndSelect("childLevel1.childrenComment", "childLevel2")
+  .where("comment.parentComment = :value", {value: null})
+  .getMany()
+}
 
 }

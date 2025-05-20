@@ -88,13 +88,15 @@ export class UserOrmController {
     return await this.userOrmService.getCourseAndItsStudents()
   }
 
-  @Get("add-comment-data")
-  async addCommentData() {
+  @Get('creat-data-self-join')
+    async createDataCommentSelfJoin() {
     return await this.userOrmService.createDataCommentSelfJoin()
   }
 
-  @Get("getTree-comment")
-  async getTreeCommentSeltJoin() {
+  @Get('get-tree-comment')
+      async getTreeComments() {
     return await this.userOrmService.getTreeComment()
   }
+
+ 
 }
