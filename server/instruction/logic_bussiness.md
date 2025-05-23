@@ -35,3 +35,50 @@ Quản lý khách hàng & chương trình thành viên (Customer Loyalty, Member
 Quản lý giao hàng & vận chuyển (Shipping, Delivery, Logistics)
 Quản lý hóa đơn & thanh toán (Invoices, Payments)
 Thống kê & Báo cáo (Sales Reports, Inventory Reports)
+
+
+# HRM
+Core Entities:
+Entity	Mô tả
+User	Người dùng (nhân viên, quản lý, admin...)
+Department	Phòng ban (IT, Sales, HR, v.v.)
+Position	Chức vụ (Dev, Manager, v.v.)
+Attendance	Chấm công (ngày, giờ vào/ra)
+LeaveRequest	Yêu cầu nghỉ phép
+Salary	Lương/thưởng
+Contract	Thông tin hợp đồng lao động
+Area (nếu có)	Khu vực quản lý (cho AREA_MANAGER)
+
+ Business Logic Gợi Ý
+Dưới đây là các logic thường gặp trong HRM:
+
+📅 Chấm công (Attendance)
+USER check-in/check-out mỗi ngày.
+
+Hệ thống tự tính số giờ làm/nghỉ trong ngày.
+
+Admin có thể export báo cáo công theo tháng.
+
+🌴 Nghỉ phép (LeaveRequest)
+USER tạo yêu cầu nghỉ phép (ngày bắt đầu – kết thúc, lý do).
+
+AREA_MANAGER hoặc ADMIN phê duyệt hoặc từ chối.
+
+Lưu trạng thái: PENDING, APPROVED, REJECTED.
+
+💰 Lương (Salary)
+Mỗi tháng tạo bản ghi lương cho từng User (lương cơ bản + phụ cấp - nghỉ phép...).
+
+Admin có thể update, export dữ liệu.
+
+USER chỉ xem được lương của mình.
+
+🧾 Quản lý hợp đồng (Contract)
+Gắn Contract với User, gồm loại hợp đồng, ngày bắt đầu, ngày kết thúc.
+
+Admin có thể theo dõi sắp hết hạn hợp đồng.
+
+🏢 Phòng ban & Chức vụ
+User thuộc 1 Department và giữ 1 Position.
+
+Dễ dàng lọc nhân viên theo phòng ban/chức vụ.
