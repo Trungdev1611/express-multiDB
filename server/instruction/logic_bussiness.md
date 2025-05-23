@@ -50,6 +50,14 @@ Contract	Thông tin hợp đồng lao động
 Area (nếu có)	Khu vực quản lý (cho AREA_MANAGER)
 
  Business Logic Gợi Ý
+
+# users và department
++) 1 department có nhiều users, 1 department chỉ có 1 manager và 1 deputy manager
+
+
+
+
+
 Dưới đây là các logic thường gặp trong HRM:
 
 📅 Chấm công (Attendance)
