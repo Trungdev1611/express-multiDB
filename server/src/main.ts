@@ -14,8 +14,11 @@ async function bootstrap() {
       forbidNonWhitelisted: true, // Báo lỗi nếu có trường không có trong DTO
     }));
 
-    const PORT = process.env.PORT || 3002
+    let  PORT = process.env.PORT || 3002
+    PORT = 3002
     console.log(`PORT`, PORT)
+    app.enableCors()
+
   await app.listen(PORT);
 }
 bootstrap();
