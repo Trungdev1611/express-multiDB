@@ -6,10 +6,11 @@ import AppDataSource from './database/data-source';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DepartModule } from './modules/department/department.module';
+import { PositionModule } from './modules/position/Position.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(AppDataSource.options),
-    UsersModule, AuthModule, DepartModule
+    UsersModule, AuthModule, DepartModule, PositionModule
   ],
   controllers: [AppController],
   providers: [AppService],

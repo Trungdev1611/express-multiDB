@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Users } from './users.entity';
 import { loginDTO } from '../auth/dto/loginDTO';
+import * as dayjs from 'dayjs';
 
 @Injectable()
 export class UsersRepository {
@@ -18,10 +19,26 @@ export class UsersRepository {
     });
   }
 
-  async findOne(idUser: number): Promise<Users | null> {
-    return this.repo.findOne({
-      where: { id: idUser },
-    });
+  async findOne(idUser: number, date?: Date): Promise<Users | null> {
+    // return this.repo.findOne({
+    //   where: { id: idUser },
+    //   relations: {
+    //     department: true,
+    //     position: true,
+    //     attendances: true
+    //   }
+    // });
+
+    const queryBuilder = this.repo.createQueryBuilder("user")
+      .leftJoinAndSelect("user.department", "department")
+      .leftJoinAndSelect("user.position", "position")
+      .leftJoinAndSelect("user.attendances", "attendances")
+      .where("user.id =:id", { id: idUser })
+    if (date) {
+      queryBuilder.andWhere("EXTRACT(MONTH FROM attendances.created_at) = :month", { month: dayjs(date).month() })
+        .andWhere("EXTRACT(YEAR FROM attendances.created_at) = :year", { year: dayjs(date).year() })
+    }
+    return await queryBuilder.getOne()
   }
 
   async findByEmailAndPass(loginData: loginDTO) {
@@ -33,7 +50,7 @@ export class UsersRepository {
     })
   }
 
-  async create(userData: Partial<Users>) {
+  create(userData: Partial<Users>) {
     return this.repo.create(userData);
   }
 

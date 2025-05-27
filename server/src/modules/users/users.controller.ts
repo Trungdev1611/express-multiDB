@@ -17,8 +17,11 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/common/guards/RoleGuard';
 import { Roles } from 'src/common/decorators/Role.decorator';
 import { JwtAuthGuard } from '../auth/JwtAuthGuard';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+@ApiTags('Users')
+@ApiBearerAuth()
 @Controller('v1/users')
-@UseGuards(AuthGuard('jwt')) 
+// @UseGuards(AuthGuard('jwt')) 
 export class UserController extends BaseDTO {
   //extends ở đây để chuẩn hoá response
   constructor(private userService: UserService) {
@@ -36,8 +39,8 @@ export class UserController extends BaseDTO {
   }
 
   @Get(`details/:id`)
-  async getDetail(@Param('id') id: number) {
-    return super.successResponse(await this.userService.findOne(id));
+  async getDetail(@Param('id') id: number, @Query("date") date ) {
+    return super.successResponse(await this.userService.findOne(id, date));
   }
 
   @Post('create-new')

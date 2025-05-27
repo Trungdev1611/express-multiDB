@@ -5,9 +5,15 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
+  OneToOne,
 } from 'typeorm';
 import { DepartmentEntity } from '../department/Department.entity';
 import { PositionEntity } from '../position/Position.entity';
+import { Exclude } from 'class-transformer';
+import { ApiHideProperty } from '@nestjs/swagger';
+import { AttendanceEntity } from '../attendance/attendance.entity';
+import { ContractEntity } from '../contract/contract.entity';
 
 export enum UserRole {
   USER = 'user',
@@ -30,6 +36,8 @@ export class Users {
   email: string;
 
   @Column()
+  @Exclude()
+  @ApiHideProperty()
   password: string;
 
   @Column({
@@ -44,6 +52,13 @@ export class Users {
 
   @ManyToOne(() => PositionEntity, position => position.users)
   position: PositionEntity
+
+  @OneToMany(() => AttendanceEntity, attendance => attendance.user)
+  attendances: AttendanceEntity[]
+
+  @OneToOne(() => ContractEntity, contract => contract.user)
+  contract: ContractEntity
+
 
   @CreateDateColumn()
   created_at: Date;

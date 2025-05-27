@@ -15,8 +15,8 @@ constructor(
             
         }
 
-        async findOne(idUser: number) {
-            const user =  await this.userRepository.findOne(idUser)
+        async findOne(idUser: number, dateareaName?: Date) {
+            const user =  await this.userRepository.findOne(idUser, dateareaName)
             if(!user) {
                 throw new CustomException(`user is not found with id: ${idUser}`, 404)
             }
@@ -24,7 +24,7 @@ constructor(
         }
 
         async createNew(userData: UserCreateDTO) {
-            const user = await this.userRepository.create(userData)
+            const user =  this.userRepository.create(userData)
             return await this.userRepository.save(user)
         }
 

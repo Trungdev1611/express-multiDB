@@ -46,7 +46,7 @@ Position	Chức vụ (Dev, Manager, v.v.)
 Attendance	Chấm công (ngày, giờ vào/ra)
 LeaveRequest	Yêu cầu nghỉ phép
 Salary	Lương/thưởng
-Contract	Thông tin hợp đồng lao động
+Contract	Thông tin hợp đồng lao động - thêm đóng bảo hiểm, 
 Area (nếu có)	Khu vực quản lý (cho AREA_MANAGER)
 
  Business Logic Gợi Ý
@@ -67,14 +67,15 @@ Hệ thống tự tính số giờ làm/nghỉ trong ngày.
 
 Admin có thể export báo cáo công theo tháng.
 
-🌴 Nghỉ phép (LeaveRequest)
+🌴 Nghỉ phép (LeaveRequest) - báo nghỉ, lý do nghỉ, chấp nhận từ chối thì ảnh hưởng đến duyệt tính lương
 USER tạo yêu cầu nghỉ phép (ngày bắt đầu – kết thúc, lý do).
 
 AREA_MANAGER hoặc ADMIN phê duyệt hoặc từ chối.
 
 Lưu trạng thái: PENDING, APPROVED, REJECTED.
 
-💰 Lương (Salary)
+💰 Lương (Salary) - bảng lương salary, tính số giờ làm trong tháng nhân tiền lương giờ, ngày, tính toán với nghỉ phép, phân quyền chỉ có user đó và cấp cao hơn mới xem được lương của họ
+
 Mỗi tháng tạo bản ghi lương cho từng User (lương cơ bản + phụ cấp - nghỉ phép...).
 
 Admin có thể update, export dữ liệu.

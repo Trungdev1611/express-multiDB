@@ -12,6 +12,7 @@ const AppDataSource = new DataSource({
   entities: [__dirname + '/../**/*.entity.{js,ts}'], //dirname là thư mục chưa data-source file (file cấu hình database này)
   migrations: [__dirname + '/migrations/*.{js,ts}'],
   synchronize: false,
+  logging: true
 });
 
 // ✅ Bắt buộc phải export đúng instance này
