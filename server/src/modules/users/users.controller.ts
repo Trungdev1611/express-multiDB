@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -18,6 +19,7 @@ import { RolesGuard } from 'src/common/guards/RoleGuard';
 import { Roles } from 'src/common/decorators/Role.decorator';
 import { JwtAuthGuard } from '../auth/JwtAuthGuard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { SearchUserDto } from './dto/SearchUserDTO';
 @ApiTags('Users')
 @ApiBearerAuth()
 @Controller('v1/users')
@@ -31,10 +33,10 @@ export class UserController extends BaseDTO {
   @Get('getlist')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getList(
-    @Query('page') page: number = 1,
-    @Query('limit') limit: number = 10,
+    @Query() searchDTO: SearchUserDto
   ) {
-    const [data, total] = await this.userService.findAll(page, limit);
+    const { page = 1, pageSize = 10, positionId } = searchDTO;
+    const [data, total] = await this.userService.findAll(page, pageSize, +positionId);
     return super.pagination(data, total);
   }
 

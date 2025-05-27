@@ -12,11 +12,18 @@ export class UsersRepository {
     this.repo = this.dataSource.getRepository(Users);
   }
 
-  async findAllAndCount(page: number, limit: number): Promise<[Users[], number]> {
-    return this.repo.findAndCount({
-      skip: (page - 1) * limit,
-      take: limit,
-    });
+  async findAllAndCount(page: number, limit: number, positionId: number | undefined): Promise<[Users[], number]> {
+    // return this.repo.findAndCount({
+    //   skip: (page - 1) * limit,
+    //   take: limit,
+    // });
+    const queryBuilder = this.repo.createQueryBuilder("user")
+      if(positionId) {
+        queryBuilder.leftJoinAndSelect("user.position", "position").where("position.id =:positionId", {positionId})
+      }
+      queryBuilder.skip((page - 1) * limit)
+      .take(limit)
+      return await queryBuilder.getManyAndCount()
   }
 
   async findOne(idUser: number, date?: Date): Promise<Users | null> {
@@ -33,6 +40,7 @@ export class UsersRepository {
       .leftJoinAndSelect("user.department", "department")
       .leftJoinAndSelect("user.position", "position")
       .leftJoinAndSelect("user.attendances", "attendances")
+      .leftJoinAndSelect("user.contract", "contract")
       .where("user.id =:id", { id: idUser })
     if (date) {
       queryBuilder.andWhere("EXTRACT(MONTH FROM attendances.created_at) = :month", { month: dayjs(date).month() })

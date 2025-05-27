@@ -9,9 +9,9 @@ constructor(
         private userRepository: UsersRepository) {
 
         }
-       async findAll(page: number, limit: number) {
+       async findAll(page: number, limit: number, positionId: number) {
          //getAll là find() còn findAndCount là phân trang và tính tổng
-            return await this.userRepository.findAllAndCount(page, limit)
+            return await this.userRepository.findAllAndCount(page, limit, positionId)
             
         }
 

@@ -51,12 +51,12 @@ const Users = () => {
   });
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = async (page: number, limit: number) => {
+  const fetchData = async (page: number, pageSize: number) => {
     setLoading(true);
     try {
       const res = await api.getQuery('v1/users/getlist', {
         page,
-        limit,
+        pageSize,
       });
       setData(res.data.data);
       setPagination({
