@@ -9,9 +9,9 @@ export default function MainLayout
     }>) {
     return (
         <div>
-            <div className="flex gap-x-4 bg-gray-100">
-                <div className="w-[200px] h-full bg-white border-red-300 border"><Navbar /></div>
-                <div className="flex-1 bg-white  border border-green-400">{children}</div>
+            <div className="flex gap-x-2 bg-gray-100">
+                <div className="w-[200px] h-full bg-white"><Navbar /></div>
+                <div className="flex-1 bg-white ">{children}</div>
             </div>
 
 
