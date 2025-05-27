@@ -44,7 +44,7 @@ const Navbar: React.FC = () => {
       onClick={onClick}
       selectedKeys={[current]}
       mode="inline"
-      style={{ height: '100vh'}}
+      style={{ height: '100vh', position: "fixed", border: "1px solid red", width: "200px"}}
       items={items}
     />
   );
