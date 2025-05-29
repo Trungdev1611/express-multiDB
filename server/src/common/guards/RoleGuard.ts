@@ -16,9 +16,9 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<{user:PayloadJwt }>();
     //lấy từ token bên stragegy.ts đã đính kèm
     const user:PayloadJwt  = request.user;
-
-    console.log(`request:::Role::`, request)
-    return roles.includes(user.role)
+    console.log(`user?.role`, user?.role, user)
+    // console.log(`request:::Role::`, request)
+    return roles.includes(user?.role)
 
   }
 }

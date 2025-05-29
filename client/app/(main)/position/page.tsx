@@ -31,7 +31,6 @@ const Position = () => {
     
     });
 
-    console.log(`res`, res)
     setData(res.data.data); // giả sử API trả về: { items: [...], total: xxx }
     setPagination(prev => ({
       ...prev,
@@ -64,7 +63,6 @@ const Position = () => {
   
     try {
       const {data} = await api.getQuery(`/position/${positionId}`); // hoặc gọi API backend của bạn
-      console.log(`data`, data)
       setSelectedUsers(data.data.users); // cần định dạng như [{ id, name, email }]
     } catch (error) {
       console.error("Failed to fetch users", error);

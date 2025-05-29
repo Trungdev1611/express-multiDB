@@ -18,7 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/common/guards/RoleGuard';
 import { Roles } from 'src/common/decorators/Role.decorator';
 import { JwtAuthGuard } from '../auth/JwtAuthGuard';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import { SearchUserDto } from './dto/SearchUserDTO';
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -46,19 +46,30 @@ export class UserController extends BaseDTO {
   }
 
   @Post('create-new')
+  //  @ApiBody({
+  //   schema: {
+  //     example: {
+  //       username: 'John Doe', 
+  //       email: 'john@example.com',
+  //       password: 'test',
+  //       role: "area_manager"
+  //     },
+  //   },
+  // })
   async createUser(@Body() userCreated: UserCreateDTO) {
     return super.successResponse(await this.userService.createNew(userCreated));
   }
 
   @Patch(`update/:id`)
+  @ApiBody({ type: UserCreateDTO })
   async update(@Param(`id`) id: number, @Body() updateData: UpdateUserDTO) {
     return super.successResponse(
       await this.userService.editUser(id, updateData),
     );
   }
 
-
-  @UseGuards(RolesGuard, JwtAuthGuard) //phải đính kèm dòng này khi dùng phân quyền
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard, RolesGuard) //phải đính kèm dòng này khi dùng phân quyền
   @Roles("admin") //chỉ cho phép admin xoá
   @Delete('delete/:id')
   async delete(@Param(`id`) id: number) {

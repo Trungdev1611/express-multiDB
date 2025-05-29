@@ -2,7 +2,9 @@ import { Body, Controller, Post } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { loginDTO } from "./dto/loginDTO";
 import { BaseDTO } from "../Base/BaseDTO";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("Auth")
 @Controller("v1/auth")
 export class AuthController extends BaseDTO{
   constructor (private authService: AuthService) {super()}

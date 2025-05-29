@@ -22,7 +22,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
  // Trả về dữ liệu sẽ được gắn vào req.user trong validate từ hàm sign
    validate(payload: PayloadJwt) {
-    console.log(`payload`, payload)
     return  payload;
   }
 }

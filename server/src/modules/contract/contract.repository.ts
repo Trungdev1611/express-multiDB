@@ -15,4 +15,10 @@ export class ContractRepository {
   async findAll(): Promise<ContractEntity[]> {
     return this.repository.find();
   }
+
+  async findOneById(idContract: number) {
+    return this.repository.findOne({
+      where: {id: idContract}
+    })
+  }
 }

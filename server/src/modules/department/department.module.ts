@@ -11,6 +11,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   ],
   controllers: [DepartController],
   providers: [DepartService, DepartmentRepo],
-  exports: []
+  exports: [DepartmentRepo]
 })
 export class DepartModule {}

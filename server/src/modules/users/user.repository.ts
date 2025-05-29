@@ -34,7 +34,7 @@ export class UsersRepository {
     //     position: true,
     //     attendances: true
     //   }
-    // });
+    // })
 
     const queryBuilder = this.repo.createQueryBuilder("user")
       .leftJoinAndSelect("user.department", "department")
@@ -66,7 +66,7 @@ export class UsersRepository {
     return this.repo.save(userData);
   }
 
-  async delete(user: Users): Promise<void> {
-    await this.repo.delete(user);
+  async delete(idUser: number): Promise<void> {
+    await this.repo.delete(idUser);
   }
 }

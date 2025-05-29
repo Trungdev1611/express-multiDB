@@ -51,5 +51,11 @@ export class DepartmentRepo {
       .where("department.id = :id", { id })
       .getOne();
   }
+
+    async findOneById(id: number) {
+    return this.repository.findOne({
+      where: {id: id}
+    })
+  }
   
 }
