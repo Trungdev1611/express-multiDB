@@ -20,7 +20,7 @@ export class ContractEntity extends BaseTimeEntity {
   @Column({ type: 'enum', enum: ['active', 'expired', 'terminated'], default: 'active' })
   status: string
 
-  @OneToOne(() => Users, user => user.contract)
+  @OneToOne(() => Users, user => user.contract, {onDelete: "CASCADE"})
   @JoinColumn()
   user: Users
 

@@ -19,7 +19,7 @@ export class AttendanceEntity {
   @Column({nullable: true})
   checkOut: Date
 
-  @ManyToOne(() => Users, user => user.attendances)
+  @ManyToOne(() => Users, user => user.attendances, {onDelete: "CASCADE"})
   user: Users
 
   @Column({

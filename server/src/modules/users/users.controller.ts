@@ -18,7 +18,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/common/guards/RoleGuard';
 import { Roles } from 'src/common/decorators/Role.decorator';
 import { JwtAuthGuard } from '../auth/JwtAuthGuard';
-import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SearchUserDto } from './dto/SearchUserDTO';
 @ApiTags('Users')
 @ApiBearerAuth()
@@ -31,6 +31,14 @@ export class UserController extends BaseDTO {
   }
 
   @Get('getlist')
+  @ApiOperation({ summary: 'Api để get list user',
+     description: `
+      - user có liên kết với contract 1-1
+      - user có liên kết với chấm công 1-n
+      - user có liên kết với position n-1
+      - user có liên kết với department n- 1
+    ` })
+    
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async getList(
     @Query() searchDTO: SearchUserDto
