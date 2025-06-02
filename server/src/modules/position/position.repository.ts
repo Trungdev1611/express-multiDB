@@ -31,6 +31,7 @@ export class PositionRepoSitory {
     // .getRawMany();
 
     const query = this.repository.createQueryBuilder("position")
+    .leftJoinAndSelect("position.base_salary", "salary_base")
       .loadRelationCountAndMap("position.userCount", "position.users") //tính count - hoặc sử dụng groupby với sql thuần cũng được
 
     if (searchPositionDTO?.name) {

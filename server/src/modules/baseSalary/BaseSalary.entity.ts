@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn } from 'typeorm';
 import { BaseTimeEntity } from '../Base/BaseTime.entity';
-import { Users } from '../users/users.entity';
 import { PositionEntity } from '../position/Position.entity';
 
 @Entity()
@@ -9,6 +8,7 @@ export class BaseSalaryEntity extends BaseTimeEntity {
   id: number;
 
   @OneToOne(() => PositionEntity, position => position.base_salary)
+  @JoinColumn()
   position: PositionEntity;
 
   @Column({type: 'decimal', name: "salary_month",precision: 15, scale: 2})
@@ -16,13 +16,6 @@ export class BaseSalaryEntity extends BaseTimeEntity {
 
   @Column()
   description: string
-
-  @Column({ type: 'enum', enum: ['active', 'expired', 'terminated'], default: 'active' })
-  status: string
-
-  @OneToOne(() => Users, user => user.contract, {onDelete: "CASCADE"})
-  @JoinColumn()
-  user: Users
 
 
 }

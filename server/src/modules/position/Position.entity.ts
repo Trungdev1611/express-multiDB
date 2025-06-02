@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, OneToOne } from 'typeorm';
 import { Users } from '../users/users.entity';
+import { BaseSalaryEntity } from '../baseSalary/BaseSalary.entity';
 
 @Entity()
 export class PositionEntity {
@@ -12,6 +13,9 @@ export class PositionEntity {
   @OneToMany(() => Users, user => user.position, {onDelete: 'CASCADE'})
   users: Users[]
 
+  @OneToOne(() => BaseSalaryEntity, (base_salary) => base_salary.position)
+  base_salary: BaseSalaryEntity
+  
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
