@@ -10,4 +10,7 @@ export class SearchUserDto  extends PaginationDTO{
   @IsNumber()
   @Type(() => Number)
   positionId: number;
+
+  @IsOptional()
+  isGetAll: boolean
 }

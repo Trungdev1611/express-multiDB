@@ -17,7 +17,7 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe({
       transform: true,  // Chuyển đổi dữ liệu vào đúng kiểu DTO
       whitelist: true,  // Tự động loại bỏ các trường không được định nghĩa trong DTO
-      forbidNonWhitelisted: true, // Báo lỗi nếu có trường không có trong DTO
+      // forbidNonWhitelisted: true, // Báo lỗi nếu có trường không có trong DTO
     }));
 
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));

@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from 'react'
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import dayjs from 'dayjs';
-import { notification, Table } from 'antd';
+import { Button, notification, Table } from 'antd';
 import api from '@/uitl/api';
 import Link from 'next/link';
 import { UserData } from '@/uitl/type';
+import { exportExcelClient } from '@/utils';
 
 const columns: ColumnsType<UserData> = [
   {
@@ -82,9 +83,23 @@ const Users = () => {
     fetchData(pagination.current!, pagination.pageSize!);
   };
 
+  async function handleExport() {
+    try {
+      const res =  await api.getQuery(`v1/users/export-excel/user`, pagination,{ responseType: 'blob' }  )
+      exportExcelClient(res.data)
+      console.log(`res`, res)
+    } catch (error) {
+      console.log(`err`, error)
+    }
+  }
   return (
     <div>
-          <Table
+      <div className='flex justify-end mt-2 mb-2'>
+        <Button color="cyan" variant="solid"
+        onClick = {handleExport}
+        >Export excel</Button>
+      </div>
+          <Table  
       dataSource = {data}
       columns={columns}
       rowKey="id"

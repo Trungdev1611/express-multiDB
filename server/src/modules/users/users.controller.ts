@@ -4,11 +4,13 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Patch,
   Post,
   Query,
+  Res,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './users.service';
 import { UpdateUserDTO, UserCreateDTO } from './dto/create';
@@ -20,6 +22,19 @@ import { Roles } from 'src/common/decorators/Role.decorator';
 import { JwtAuthGuard } from '../auth/JwtAuthGuard';
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SearchUserDto } from './dto/SearchUserDTO';
+import { Users } from './users.entity';
+import { exportExcelData } from 'src/common/util';
+import { Response } from 'express';
+import * as dayjs from 'dayjs';
+
+const columnsUserExport = [
+  { header: 'ID', key: 'id', width: 10 },
+  { header: 'Username', key: 'username', width: 30 },
+  { header: 'Email', key: 'email', width: 25 },
+  { header: 'Role', key: 'role', width: 25 },
+  { header: 'Update_at', key: 'created_at', width:40 },
+];
+
 @ApiTags('Users')
 @ApiBearerAuth()
 @Controller('v1/users')
@@ -46,6 +61,29 @@ export class UserController extends BaseDTO {
     const { page = 1, pageSize = 10, positionId } = searchDTO;
     const [data, total] = await this.userService.findAll(page, pageSize, +positionId);
     return super.pagination(data, total);
+  }
+
+
+  @Get('export-excel/user')
+  async exportExcelUser(
+    @Query() searchDTO: SearchUserDto, @Res() res: Response
+  ) {
+    const { page = 1, pageSize = 10, positionId, isGetAll } = searchDTO;
+    let data: Users[]
+    if(isGetAll) {
+      [data] = await this.userService.findAll(0, 0, +positionId)
+    }
+    else {
+      [data]= await this.userService.findAll(page, pageSize, +positionId)
+    }
+    if(data) {
+      exportExcelData(res, data.map(item => {
+        return {...item, created_at: dayjs(item.created_at).format('YYYY-MM-DD HH:mm:ss')}
+      }), columnsUserExport)
+    }
+    else {
+      res.status(204).send(); 
+    }
   }
 
   @Get(`details/:id`)

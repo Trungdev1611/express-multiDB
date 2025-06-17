@@ -21,8 +21,11 @@ export class UsersRepository {
       if(positionId) {
         queryBuilder.leftJoinAndSelect("user.position", "position").where("position.id =:positionId", {positionId})
       }
-      queryBuilder.skip((page - 1) * limit)
-      .take(limit)
+      if(page && limit) {
+        queryBuilder.skip((page - 1) * limit)
+        .take(limit)
+      }
+   
       return await queryBuilder.getManyAndCount()
   }
 
